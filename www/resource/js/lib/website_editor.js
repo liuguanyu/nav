@@ -1,0 +1,5 @@
+(function ($){
+    define ([] , function (){
+
+    });    
+})(jQuery);

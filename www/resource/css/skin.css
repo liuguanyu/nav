@@ -128,6 +128,33 @@ html {
     background: #d6f5ff;
 }
 
+.websites .btn-del , .websites .btn-edit{
+    background : url(http://p1.qhimg.com/d/_hao360/my360/icon_20120218.png) no-repeat;
+    cursor : pointer;
+    display:none;
+}
+
+.managing .btn-del , .managing .btn-edit{
+    display:block;
+}
+
+.managing .btn-del {
+    background-position: -76px 0;
+}
+
+.managing li:hover .btn-del {
+    background-position: -56px 0
+}
+
+.managing .btn-edit {
+    background-position: 0 -19px;
+}
+
+.managing li:hover .btn-edit {
+    background-position: 0 -40px;
+}
+
+
 .website-manage-panel {
     display: none;
     border-top : 1px solid #25ace3;

@@ -15,29 +15,35 @@
                 this._bindEvent();
             },
 
+            openManage : function (){
+                var d = $(this.switchDom);                
+                d.html(d.attr("data-show-managing"));
+
+                $(this.websitesShowerDom).addClass("managing");
+                $(this.managerDom).show();
+
+                this.status = "managing";
+            }, 
+
+            closeManage : function (){
+                var d = $(this.switchDom);                
+                d.html(d.attr("data-show-normal"));
+
+                $(this.websitesShowerDom).removeClass("managing");
+                $(this.managerDom).hide();
+
+                this.status = "normal";                
+            },
+
             _bindEvent : function (){
                 var self = this;
 
                 $(this.switchDom).on("click" , function (){
                     var d = $(this);
 
-                    if(self.status == "normal"){
-
-                        $(self.websitesShowerDom).addClass("managing");
-                        $(self.managerDom).show();
-
-                        d.html(d.attr("data-show-managing"));
-
-                        self.status = "managing";
-                    }
-                    else{
-                        $(self.websitesShowerDom).removeClass("managing");
-                        $(self.managerDom).hide();
-
-                        d.html(d.attr("data-show-normal"));
-
-                        self.status = "normal";
-                    }
+                    (self.status == "normal")
+                        ? self.openManage() 
+                        : self.closeManage();
                 });
             }    
         };
