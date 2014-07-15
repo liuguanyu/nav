@@ -70,11 +70,12 @@ html {
     letter-spacing: normal;
     font-size:1em;
     border-radius : .3em;
-    background:#ccc;
     color:#333;
 }
 
-.bd .container {}
+.search-form .search-btn{
+    background: url('http://p6.qhimg.com/t01b5c22714b8e58586.png') no-repeat 0 8px;
+} 
 
 .menu {
     border : .1em solid #b7b7b7;
@@ -140,7 +141,7 @@ html {
     color:#999;    
 }
 
-.btn-line .btn{
+.btn-line .btn , .search-bar .btn{
     background:url(http://p1.qhimg.com/d/_hao360/my360/bg_input_20120222.png) 0 -88px ; 
     width: 74px;
     height: 34px;
@@ -149,6 +150,12 @@ html {
     color:#333;
 }
 
-.btn-line .btn:hover{
+.btn-line .btn:hover , .search-bar .btn:hover{
     background-position: 0 -131px;
+}
+
+.search-bar {
+    background: #fff;
+    opacity: .8;
+    border-radius: 3px;
 }

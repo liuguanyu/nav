@@ -56,17 +56,58 @@
 .toolbar {
     position:absolute;
     display:block;
-    padding:0 .3em;
-    bottom:.6em;
-    right:1.2em;
+    padding:0;
+    top:.6em;
+    right:0;
+    height:40px;
+}
+
+.toolbar em , .toolbar span{
+    float : left;
+    height:40px;
+    line-height: 40px;
+}
+
+.toolbar em {
+    margin-right:5px;
+}
+
+.search-form {
+    position:relative;
+    float:left;
+    height:2em;
+    margin:.2em;
+}
+
+.search-form .ipt {
+    padding-right:30px;
+    width:60px;
+    height:30px;
+}
+
+.search-form .search-btn{
+    position: absolute;
+    width: 38px;
+    height: 30px;
+    border: none;
+    right: 0;
+    top: 0;
+}
+
+.main {
+    margin : 3em 0;
 }
 
 .bd .container {
    padding : 1em 0 ;   
 }
 
+.relative-container {
+    position:relative;
+}
+
 .menu {
-    margin:1.5em;
+    margin:0 1.5em;
     margin-left: 0;
     padding: 2em 0;
     min-height : 45em;
@@ -92,7 +133,7 @@
 
 .websites-container {
     position:relative;
-    margin:1.5em 0;
+    margin: 0;
     padding: 2em 0;
     min-height : 45em;
 }

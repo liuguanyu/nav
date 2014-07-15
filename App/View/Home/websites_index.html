@@ -35,54 +35,55 @@
                     </div> 
                 </div>  
             </div>
-            
-            <div class="toolbar">
-                <span>欢迎你，</span>
-                <em><a target="_self" href="/user/detail"><%=user_info.displayName%></a></em>
-            </div>
         </div>
     </div>
 
     <div class="bd md">
-        <div class="container grid-1c clearfix">
-            <div class="pct1o1">
-                搜索区
-            </div>
-        </div>
+        <div class="container relative-container grid-5c1 clearfix">
+            <div class="toolbar clearfix">
+                <span>欢迎你，</span>
+                <em><a target="_self" href="/user/detail"><%=user_info.displayName%></a></em>
+                <form action="http://www.so.com/s" target="_blank" class="search-form">
+                    <input type="text" class="ipt" name="q" autocomplete="off" placeholder="so.com">
+                    <input type="hidden" name="ie" value="utf-8">
+                    <button type="submit" class="btn search-btn"></button>
+                </form>
+            </div>  
 
-        <div class="container grid-5c1 clearfix">
-            <div class="pct-1o5">
-                <ul class="menu">
-                    <li class="active"><a target="_self" href="">常用网址</a></li>
-                    <li><a target="_self" href="">Hosts备份</a></li>
-                    <li><a target="_self" href="">定时提醒</a></li>
-                </ul>
-            </div>
+            <div class="main">     
+                <div class="pct-1o5">
+                    <ul class="menu">
+                        <li class="active"><a target="_self" href="">常用网址</a></li>
+                        <li><a target="_self" href="">Hosts备份</a></li>
+                        <li><a target="_self" href="">定时提醒</a></li>
+                    </ul>
+                </div>
 
-            <div class="pct-4o5">
-                <div class="websites-container">
-                    <ul class="websites clearfix">
-                        <% websites.forEach(function (wbs){%>
-                            <li><a href="<%=wbs.url%>"><%=wbs.title%></a></li>
-                        <%})%>
-                    </ul>  
-                    <i class="websites-controll">管理我的网址</i>
+                <div class="pct-4o5">
+                    <div class="websites-container">
+                        <ul class="websites clearfix">
+                            <% websites.forEach(function (wbs){%>
+                                <li><a href="<%=wbs.url%>"><%=wbs.title%></a></li>
+                            <%})%>
+                        </ul>  
+                        <i class="websites-controll">管理我的网址</i>
 
-                    <div class="website-manage-panel">
-                        <dl class="form-cell clearfix">
-                            <dt>网站名称</dt>
-                            <dd><input type="text" id="sitename" class="ipt"/></dd>
-                        </dl>
-                        <dl class="form-cell clearfix">
-                            <dt>网站地址</dt>
-                            <dd><input type="text" id="siteurl" class="ipt"/></dd>
-                        </dl> 
-                        <div class="form-cell btn-line">
-                            <button class="btn btn-finish" type="button">添加</button>
-                            <button class="btn btn-cancle" type="button">取消</button>
-                        </div>                       
-                    </div>
-                </div>                  
+                        <div class="website-manage-panel">
+                            <dl class="form-cell clearfix">
+                                <dt>网站名称</dt>
+                                <dd><input type="text" id="sitename" class="ipt"/></dd>
+                            </dl>
+                            <dl class="form-cell clearfix">
+                                <dt>网站地址</dt>
+                                <dd><input type="text" id="siteurl" class="ipt"/></dd>
+                            </dl> 
+                            <div class="form-cell btn-line">
+                                <button class="btn btn-finish" type="button">添加</button>
+                                <button class="btn btn-cancle" type="button">取消</button>
+                            </div>                       
+                        </div>
+                    </div>                  
+                </div>
             </div>
         </div>
     </div>
@@ -95,7 +96,9 @@ require.config({
     paths: {
         click_inputer : "lib/click_inputer" ,
         wisdom : "module/wisdom",
-        cache_svc : "lib/cache_svc"
+        cache_svc : "lib/cache_svc",
+        stretch_inputer : "lib/stretch_inputer",
+        search_form : "module/search_form"
     }
 });
 </script>

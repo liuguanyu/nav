@@ -14,4 +14,4 @@
 
         wisdom.init();
     });
-})(jQuery);    
+})(jQuery);   

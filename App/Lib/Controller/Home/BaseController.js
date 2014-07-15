@@ -28,7 +28,7 @@ module.exports = Controller(function(){
 
             //给模版里设置title等一些字段
             this.assign({
-                title: "便利导航"
+                title: "内部导航"
             })
         }
     }
