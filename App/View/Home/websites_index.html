@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%=title%></title>
+
+    <link rel="stylesheet" href="/resource/css/reset.css"/>
+    <link rel="stylesheet" href="/resource/css/common.css"/>
+    <link rel="stylesheet" href="/resource/css/grid.css"/>
+    <link rel="stylesheet" href="/resource/css/layout.css"/>    
+    <link rel="stylesheet" href="/resource/css/skin.css"/>
+
+    <base target="_blank"/>
+</head>
+<body>
+<div class="doc">        
+    <div class="hd md">
+        <div class="container grid-3c1 clearfix">
+            <div class="pct-1o3">
+                <a class="" href="http://"><img src="http://p0.qhimg.com/t012049db1b713bf793.png"/></a>
+                <span class="sub-title"><%=title%></span>
+            </div>
+
+            <div class="pct-2o3">
+                <div class="wisdom-container">
+                <p class="wisdom"><span><%=wisdom[0].txt%></span> <a class="js-add-wisdom" href="###">[+_+]</a></p>
+
+                    <div class="wisdom-poster js-wisdom-poster">
+                        <h3>添加我的吐槽</h3>
+                        <input type="text" class="ipt js-ipt" name="wisdom"/> 
+                        <button type="button" class="btn js-btn">OKay，就这个样子吧。</button>
+
+                        <a href="###" class="close js-close" title="关闭"></a>
+                    </div> 
+                </div>  
+            </div>
+            
+            <div class="toolbar">
+                <span>欢迎你，</span>
+                <em><a target="_self" href="/user/detail"><%=user_info.displayName%></a></em>
+            </div>
+        </div>
+    </div>
+
+    <div class="bd md">
+        <div class="container grid-5c1 clearfix">
+            <div class="pct-1o5">
+                <ul class="menu">
+                    <li class="active"><a target="_self" href="">常用网址</a></li>
+                    <li><a target="_self" href="">Hosts备份</a></li>
+                    <li><a target="_self" href="">定时提醒</a></li>
+                </ul>
+            </div>
+
+            <div class="pct-4o5">
+                <div class="websites-container">
+                    <ul class="websites clearfix">
+                        <% websites.forEach(function (wbs){%>
+                            <li><a href="<%=wbs.url%>"><%=wbs.title%></a></li>
+                        <%})%>
+                    </ul>  
+                    <i class="websites-controll">管理我的网址</i>
+
+                    <div class="website-manage-panel">
+                        <dl class="form-cell clearfix">
+                            <dt>网站名称</dt>
+                            <dd><input type="text" id="sitename" class="ipt"/></dd>
+                        </dl>
+                        <dl class="form-cell clearfix">
+                            <dt>网站地址</dt>
+                            <dd><input type="text" id="siteurl" class="ipt"/></dd>
+                        </dl>                        
+                    </div>
+                </div>                  
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="http://s0.qhimg.com/static/8b15829770ad1a0f/jquery,require.js"></script>
+<script>
+require.config({
+    baseUrl : "/resource/js/",
+    paths: {
+        click_inputer : "lib/click_inputer" ,
+        wisdom : "module/wisdom"
+    }
+});
+</script>
+
+<script data-main="scripts/main" src="/resource/js/page/websites.js"></script>
+</html>

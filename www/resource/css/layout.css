@@ -1,0 +1,136 @@
+.doc {
+    margin:1.6em auto;
+    width:90%;
+    letter-spacing: normal;
+}
+
+.hd {
+    position:relative;    
+    height:102px;
+}
+
+.hd .container{
+    padding : .8em;
+}
+
+.sub-title{
+    line-height: 1.4em;
+    height:1.8em;
+    vertical-align: -.4em;
+}
+
+.wisdom-container{
+    margin-top:1.5em;
+    position: relative;
+}
+
+.wisdom-poster {
+    position : absolute ;
+    top : -2.2em;
+    left : 0;
+    width:60%;
+}
+
+.wisdom-poster h3 {
+    margin : .5em;
+}
+
+.wisdom-poster .ipt {
+    margin : .5em;
+    width:90%;
+    height : 1.5em;
+}
+
+.wisdom-poster .btn {
+    margin : .2em .5em;
+}
+
+.wisdom-poster .close{
+    position : absolute;
+    top : 0 ;
+    right : 0;
+    width: 29px;
+    height: 24px;
+}
+
+.toolbar {
+    position:absolute;
+    display:block;
+    padding:0 .3em;
+    bottom:.6em;
+    right:1.2em;
+}
+
+.bd .container {
+   padding : 1em 0 ;   
+}
+
+.menu {
+    margin:1.5em;
+    margin-left: 0;
+    padding: 2em 0;
+    min-height : 45em;
+}
+
+.menu li {
+    width:100%;
+    vertical-align: middle;
+}
+
+.menu li:first-child a{
+    border-top:.1em dotted #999;
+}
+
+.menu li a {
+    display:block;
+    margin:0 1.2em;
+    padding:.5em 1em;
+    height :2em;
+    line-height: 2em;
+    border-bottom:.1em dotted #999;
+}
+
+.websites-container {
+    position:relative;
+    margin:1.5em 0;
+    padding: 2em 0;
+    min-height : 45em;
+}
+
+.websites-controll {
+    position: absolute;
+    top:.1em;
+    right:1em;
+    padding-left: 20px;
+}
+
+.websites {
+    margin: 0 2em;
+}
+
+.websites li{
+    float:left;
+    margin: 0 1em 1em 0;
+}
+
+.websites li a {
+    display:block;
+    padding:0 .5em;
+    width : 8em ;
+    height: 2em;
+    line-height: 2em;
+    overflow:hidden;
+}
+
+.website-manage-panel {
+    padding : 3em ;
+}
+
+.form-cell {
+    padding: .5em 0;
+}
+
+.form-cell dt , .form-cell dd {
+    float:left;
+    margin-right: .5em;
+}

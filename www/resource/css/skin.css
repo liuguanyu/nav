@@ -1,0 +1,142 @@
+html {
+     background: url(http://p1.qhimg.com/d/_hao360/my360/2/outer_bg5.png) repeat-x #f4e0ab;
+}
+
+.doc {
+    height:60em;
+    font-size : 1.4em;
+    background: url(http://p1.qhimg.com/d/_hao360/my360/2/inner_bg5.jpg) no-repeat top center ;
+}
+
+.hd {
+    border : .1em solid #b7b7b7;
+    border-radius : .8em;
+    background:#fff url(http://p0.qhimg.com/t01135ef7e88f54df61.jpg) right center no-repeat;
+    opacity: .7;
+}
+
+.sub-title{
+    font-size:1.4em;
+    font-weight: bold;
+    color:#555;
+    text-shadow: -.03em .03em .03em #666;
+}
+
+.wisdom {
+    font-size:1.8em;
+    text-shadow: .08em .08em .08em #ccc;
+    color:#999;
+}
+
+.wisdom a , .wisdom a:visited , .wisdom a:active{
+    font-size:.5em;
+    text-shadow: none;
+    text-decoration: none;
+}
+
+.wisdom-poster {
+    display:none;
+    border: 1px dotted #333;
+    background : #fff;
+    border-radius: 3px;
+}
+
+.wisdom-poster .ipt {
+    border-radius: 3px;
+    padding: 0 .5em;
+}
+
+.wisdom-poster .close{
+    background: url(http://p7.qhimg.com/t012baa59bdfe70ffab.gif) no-repeat;
+    background-position: -219px -130px;
+}
+
+.wisdom-poster .close:hover{
+    background-position: -262px -130px;
+}
+
+.wisdom-poster .btn {
+    background : #666;
+    color:#fff;
+    border-radius:.2em;
+}
+
+.wisdom-poster .btn:hover {
+    background : #999;
+    color:#eee;
+}
+
+.toolbar {
+    letter-spacing: normal;
+    font-size:1em;
+    border-radius : .3em;
+    background:#ccc;
+    color:#333;
+}
+
+.bd .container {}
+
+.menu {
+    border : .1em solid #b7b7b7;
+    border-radius : .3em;
+    background:#fff;
+    opacity: .8;
+}
+
+.menu li a , .menu li a:visited { 
+    color: #666;
+    text-decoration: none;
+}    
+
+.menu li a:hover , .menu .active a ,  .menu .active a:visited {
+    color: #fff;
+    background : #6e6f6d;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+.websites-container {
+    background:#fff;
+    opacity: .8;
+    border-radius: 3px;    
+} 
+
+.websites-controll {
+    background:url(http://p1.qhimg.com/t0117eace0d90c96012.png) no-repeat 0 4px;
+    cursor:pointer;
+    color:#777;
+}
+
+.websites-controll:hover {
+    color:#e60012;
+}
+
+.websites li{
+    border:.1em dotted #ccc;
+    border-radius: 2px;
+}
+
+.websites li a{
+    background: #ffffef;
+    text-decoration: none;
+    color:#999;
+    font-size : 1em;
+}
+
+.websites li a:hover{
+    background: #d6f5ff;
+}
+
+.website-manage-panel {
+    border-top : 1px solid #25ace3;
+}
+
+.form-cell {
+    font-size: 1em;
+    color:#999;
+}
+
+.form-cell .ipt {
+    width: 40em;
+    color:#999;    
+}
