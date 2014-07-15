@@ -126,6 +126,11 @@
     padding : 3em ;
 }
 
+.website-manage-panel .ipt{
+    width:40em;
+}
+
+
 .form-cell {
     padding: .5em 0;
 }
@@ -133,4 +138,8 @@
 .form-cell dt , .form-cell dd {
     float:left;
     margin-right: .5em;
+}
+
+.btn-line {
+    margin-left: 7em;
 }

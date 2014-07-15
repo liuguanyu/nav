@@ -137,6 +137,18 @@ html {
 }
 
 .form-cell .ipt {
-    width: 40em;
     color:#999;    
+}
+
+.btn-line .btn{
+    background:url(http://p1.qhimg.com/d/_hao360/my360/bg_input_20120222.png) 0 -88px ; 
+    width: 74px;
+    height: 34px;
+    text-align: center;
+    border: 0;
+    color:#333;
+}
+
+.btn-line .btn:hover{
+    background-position: 0 -131px;
 }
