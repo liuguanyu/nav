@@ -66,7 +66,7 @@
                                 <li><a href="<%=wbs.url%>"><%=wbs.title%></a></li>
                             <%})%>
                         </ul>  
-                        <i class="websites-controll">管理我的网址</i>
+                        <i class="websites-controll" data-show-managing="返回我的网址" data-show-normal="管理我的网址">管理我的网址</i>
 
                         <div class="website-manage-panel">
                             <dl class="form-cell clearfix">
@@ -98,7 +98,9 @@ require.config({
         wisdom : "module/wisdom",
         cache_svc : "lib/cache_svc",
         stretch_inputer : "lib/stretch_inputer",
-        search_form : "module/search_form"
+        search_form : "module/search_form",
+        manage_switcher : "lib/manage_switcher",
+        website_switcher : "module/website_switcher"
     }
 });
 </script>

@@ -129,6 +129,7 @@ html {
 }
 
 .website-manage-panel {
+    display: none;
     border-top : 1px solid #25ace3;
 }
 
