@@ -120,7 +120,7 @@ html {
 .websites li a{
     background: #ffffef;
     text-decoration: none;
-    color:#999;
+    color:#333;
     font-size : 1em;
 }
 
@@ -162,11 +162,11 @@ html {
 
 .form-cell {
     font-size: 1em;
-    color:#999;
+    color:#333;
 }
 
 .form-cell .ipt {
-    color:#999;    
+    color:#333;    
 }
 
 .btn-line .btn , .search-bar .btn{
@@ -186,4 +186,26 @@ html {
     background: #fff;
     opacity: .8;
     border-radius: 3px;
+}
+
+.suggest {
+    border: 1px solid #919191;
+    border-top:none;
+    background: #f9f9f9;
+    overflow: hidden;
+    display: none;
+}
+
+.sug-name {
+    font-size: 14px;
+    color: #333;
+}
+
+.sug-href {
+    font-size: 14px;
+    color: #333;
+}
+
+.suggest .hover {
+    background: #f0f0f0;
 }

@@ -32,17 +32,7 @@
  * TODO : 1，为jq做适配
  */
 (function ($){
-    define([] , function(){
-        String.prototype.camelize = function() {
-            return this.replace(/\-(\w)/ig, function(a, b) {
-                return b.toUpperCase();
-            });
-        };
-
-        String.prototype.stripTags = function() {
-            return (this || '').replace(/<[^>]+>/g, '');
-        };
-
+    define(['str_util'] , function(){
         var noEventKeycode = [9,16,17,18,19,20,33,34,35,36,37,39,41,42,43,45,47] ,
             getConstructorName = function (o) { 
                 if(o != null && o.constructor != null){
@@ -620,7 +610,7 @@
         
     		_fixPos : (function (){
     		    var lastDoms = {} , doFix = function (){
-                    var domPos = this._dom.offset() ,
+                    var domPos = this._dom[0].getBoundingClientRect() ,
                         lastDom = lastDoms[this.suggestList.attr("id")];
 
                     if (domPos.left != lastDom.left || domPos.top != lastDom.top || domPos.forid != lastDom.forid){
@@ -646,8 +636,10 @@
     		}).apply(this),
     		
     		_resetPos : function (){
-    		    var offset = this._dom.offset(),
+    		    var offset = this._dom[0].getBoundingClientRect(),
     		        adjust = this.posAdjust ;
+
+                console.info(offset , this._dom[0]);    
 
     		    this.suggestList.css({
                     "position" : "absolute",

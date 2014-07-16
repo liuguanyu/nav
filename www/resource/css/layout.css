@@ -140,7 +140,7 @@
 
 .websites-controll {
     position: absolute;
-    top:.1em;
+    top:.3em;
     right:1em;
     padding-left: 20px;
 }
@@ -188,6 +188,7 @@
 
 .website-manage-panel .ipt{
     width:40em;
+    padding:.5em;
 }
 
 
@@ -200,6 +201,29 @@
     margin-right: .5em;
 }
 
+.form-cell dt {
+    padding-top: .5em;
+}
+
 .btn-line {
     margin-left: 7em;
+}
+
+.sug-name {
+    float: left;
+    padding-left: .5em;
+    margin-right: 12px;
+    width: 145px;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+}
+
+.sug-href {
+    float: left;
+    margin-right: 12px;
+    width: 240px;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
 }

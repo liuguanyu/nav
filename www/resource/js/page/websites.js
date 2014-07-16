@@ -12,7 +12,5 @@
 
 (function ($){
     /* 网址管理 */
-    require (["website_switcher" , "suggest"] , function (ws ,sug){
-        console.info(sug);
-    });  
+    require (["website_switcher"] , function (ws){});  
 })(jQuery);    

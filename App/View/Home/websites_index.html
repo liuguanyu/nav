@@ -74,18 +74,20 @@
                         <i class="websites-controll" data-show-managing="返回我的网址" data-show-normal="管理我的网址">管理我的网址</i>
 
                         <div class="website-manage-panel">
-                            <dl class="form-cell clearfix">
-                                <dt>网站名称</dt>
-                                <dd><input type="text" id="sitename" class="ipt"/></dd>
-                            </dl>
-                            <dl class="form-cell clearfix">
-                                <dt>网站地址</dt>
-                                <dd><input type="text" id="siteurl" class="ipt"/></dd>
-                            </dl> 
-                            <div class="form-cell btn-line">
-                                <button class="btn btn-finish" type="button">添加</button>
-                                <button class="btn btn-cancle" type="button">取消</button>
-                            </div>                       
+                            <form class="manage-form">
+                                <dl class="form-cell clearfix">
+                                    <dt>网站名称</dt>
+                                    <dd><input type="text" id="sitename" class="ipt sitename"/></dd>
+                                </dl>
+                                <dl class="form-cell clearfix">
+                                    <dt>网站地址</dt>
+                                    <dd><input type="text" id="siteurl" class="ipt siteurl"/></dd>
+                                </dl> 
+                                <div class="form-cell btn-line">
+                                    <button class="btn btn-finish" type="button">添加</button>
+                                    <button class="btn btn-cancle" type="button">取消</button>
+                                </div>
+                            </form>                       
                         </div>
                     </div>                  
                 </div>
@@ -107,7 +109,9 @@ require.config({
         manage_switcher : "lib/manage_switcher",
         website_switcher : "module/website_switcher",
         website_editor : "lib/website_editor",
+        edit_suggest_retouch : "module/edit_suggest_retouch",
         suggest : "lib/suggest",
+        str_util : "lib/str_util"
     }
 });
 </script>
