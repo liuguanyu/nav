@@ -20,7 +20,18 @@
 /*jslint bitwise: true */
 /*global unescape, define */
 
-define(function (){
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(factory);
+    } else if (typeof exports === 'object') {
+        // CommonJS
+        module.exports = factory();
+    } else {
+        // Browser globals
+        root.md5 = factory();
+    }
+}(this , function (){
     'use strict';
 
     /*
@@ -275,4 +286,4 @@ define(function (){
     }
     */
     return md5;
-});
+}));

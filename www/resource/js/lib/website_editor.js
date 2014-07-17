@@ -23,7 +23,7 @@
                 this.um = new um(this.editContainer , this.websitesContainer , this);
 
                 this.submiter.on("click" , function (){
-                    self.um.add();
+                    self.um.finishEdit();
                 });    
             },
 
