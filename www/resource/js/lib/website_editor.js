@@ -1,5 +1,5 @@
 (function ($){
-    define (["str_util" , "edit_suggest_retouch"] , function (su , sug_er){
+    define (["str_util" , "edit_suggest_retouch" , "url_manager"] , function (su , sug_er , um){
         var  WebsiteEditor  = function (editContainer , websitesContainer){
             this.editContainer = $(editContainer);
             this.websitesContainer = $(websitesContainer);
@@ -18,8 +18,12 @@
             },
 
             _bindEvent : function (){
-                this.submiter.on("click" , function (){
+                var self = this ;
 
+                this.um = new um(this.editContainer , this.websitesContainer , this);
+
+                this.submiter.on("click" , function (){
+                    self.um.add();
                 });    
             },
 

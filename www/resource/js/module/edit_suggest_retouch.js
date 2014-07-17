@@ -68,8 +68,7 @@
                 new sug(thisHandler.this_handler.nameIpt , cfgName);
                 new sug(thisHandler.this_handler.urlIpt, cfgUrl);
             }
-        }
-
+        };
 
         return EditSuggestRetouch;
     }); 

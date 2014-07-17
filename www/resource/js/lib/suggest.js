@@ -637,9 +637,7 @@
     		
     		_resetPos : function (){
     		    var offset = this._dom[0].getBoundingClientRect(),
-    		        adjust = this.posAdjust ;
-
-                console.info(offset , this._dom[0]);    
+    		        adjust = this.posAdjust ; 
 
     		    this.suggestList.css({
                     "position" : "absolute",
