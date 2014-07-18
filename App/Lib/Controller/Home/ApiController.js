@@ -57,15 +57,15 @@ module.exports = Controller("Home/BaseController" , function(){
                             } , {
                                 "websites_id" : data.websiteId ,                                
                                 "uid" : data.uid 
-                            })
+                            });
 
                             return promise.then(function (){
-                                return data.websiteId;
+                                return getPromise({id : data.websiteId});
                             } , function (){
-                                return -1;
+                                return getPromise(-1 , true);
                             })    
                         });   
-                    } 
+                    } ,
                 };
 
             var act = this.get("act"),

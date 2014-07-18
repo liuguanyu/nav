@@ -24,7 +24,19 @@
 
                 this.submiter.on("click" , function (){
                     self.um.finishEdit();
-                });    
+                });   
+
+                this.nameIpt.on("keypress" , function (e){
+                    if (e.keyCode == 13){
+                        self.um.finishEdit();
+                    }    
+                }); 
+
+                this.urlIpt.on("keypress" , function (e){
+                    if (e.keyCode == 13){
+                        self.um.finishEdit();
+                    }    
+                }); 
             },
 
             init : function (){

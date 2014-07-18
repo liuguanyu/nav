@@ -19,11 +19,18 @@
                 }   
             },
             add : function (){
-                var url = new ue(this.handler.nameIpt.val() , this.handler.urlIpt.val()),   
-                    promise = up.add(url.name , url.url);
+                var urlEntity = new ue(this.handler.nameIpt.val() , this.handler.urlIpt.val()),   
+                    promise = up.add(urlEntity.name , urlEntity.url) ,
+                    urlUiEntity = new uue(this.siteContainer),
+                    self = this;
                     
                 promise.done(function (data){
-                    console.info("成功");
+                    var id = data.data.id;
+                    urlEntity.fillId(id);
+                    urlUiEntity.add(urlEntity).always(function (){
+                        self.handler.nameIpt.val("");
+                        self.handler.urlIpt.val("");    
+                    });
                 }).fail(function (data){
                     console.info("失败");
                 });        
@@ -37,7 +44,6 @@
             drag : function (){
 
             }
-
         };    
 
         return UrlManager;    

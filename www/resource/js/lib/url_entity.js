@@ -47,6 +47,10 @@ define(["md5"] , function (md5){
             this.sid = md5(url);
         },
 
+        fillId : function (id){
+            this.id = id;
+        },
+
         getFavicon : function(){ 
             return faviconUrl.replace('{domain}', this.domain || this.getUriData('domain'));
         },

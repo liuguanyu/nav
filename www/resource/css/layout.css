@@ -138,6 +138,10 @@
     min-height : 45em;
 }
 
+.websites-title {
+    margin:0 0 1em 2em;
+}
+
 .websites-controll {
     position: absolute;
     top:.3em;
@@ -164,18 +168,27 @@
     overflow:hidden;
 }
 
-.websites .btn-del , .websites .btn-edit{
+.websites .favico {
+    margin : 0 5px;
+    width : 16px;
+    height : 16px;
+}
+
+.websites .btn-del ,
+.websites .btn-edit , 
+.tips .btn-del ,
+.tips .btn-edit {
     position : absolute;
 }
 
-.websites .btn-del{
+.websites .btn-del , .tips .btn-del {
     top: 0;
     right: 0;
     width: 14px;
     height: 13px;
 }
 
-.websites .btn-edit{
+.websites .btn-edit , .tips .btn-edit{
     top: 15px;
     right: 12px;
     width: 12px;
@@ -189,6 +202,24 @@
 .website-manage-panel .ipt{
     width:40em;
     padding:.5em;
+}
+
+.tips {
+    position : absolute;
+} 
+
+.tips a {
+    display : block;
+    padding : 0 .5em;
+    width : 10em ;
+    height: 3em;
+    line-height: 3em;      
+}
+
+.tips .favico {
+    margin : 0 5px;
+    width : 16px;
+    height : 16px;
 }
 
 
