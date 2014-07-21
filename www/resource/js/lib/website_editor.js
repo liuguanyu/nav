@@ -17,10 +17,16 @@
                 new sug_er(this);
             },
 
-            _bindEvent : function (){
-                var self = this ;
-
+            _initUm : function (){
                 this.um = new um(this.editContainer , this.websitesContainer , this);
+            } ,
+
+            _initUrls : function (){
+                this.um.initUrls();
+            },
+
+            _bindEvent : function (){
+                var self = this ;                
 
                 this.submiter.on("click" , function (){
                     self.um.finishEdit();
@@ -40,6 +46,8 @@
             },
 
             init : function (){
+                this._initUm();
+                this._initUrls();
                 this._installSuggest();  
                 this._bindEvent(); 
             }   

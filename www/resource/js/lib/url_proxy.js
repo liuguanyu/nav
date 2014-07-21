@@ -20,6 +20,12 @@
                     };
 
                 return this._send2Svc(act , data); 
+            } ,
+
+            get : function (){
+                var act = "get" , data = {} ;
+
+                return this._send2Svc(act , data); 
             }     
         };
 

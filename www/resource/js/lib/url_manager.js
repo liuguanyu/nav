@@ -7,9 +7,15 @@
             this.handler = handler;
 
             this.editor.editStatus = "add";
+
+            this.init();
         } ;
 
         UrlManager.prototype = {
+            init : function (){
+                this.urlUiEntity = new uue(this.siteContainer);
+            },    
+
             finishEdit : function (){
                 if (this.editor.editStatus == "add") {
                     this.add();
@@ -19,22 +25,39 @@
                 }   
             },
             add : function (){
-                var urlEntity = new ue(this.handler.nameIpt.val() , this.handler.urlIpt.val()),   
+                var urlEntity = new ue(this.handler.nameIpt.val() , this.handler.urlIpt.val()) ,   
                     promise = up.add(urlEntity.name , urlEntity.url) ,
-                    urlUiEntity = new uue(this.siteContainer),
+                    urlUiEntity = this.urlUiEntity ,
                     self = this;
                     
                 promise.done(function (data){
-                    var id = data.data.id;
-                    urlEntity.fillId(id);
+                    urlEntity.fillId(data.data.id);
+                    urlEntity.fillIsProtected(data.data.is_protected);
                     urlUiEntity.add(urlEntity).always(function (){
                         self.handler.nameIpt.val("");
                         self.handler.urlIpt.val("");    
                     });
                 }).fail(function (data){
-                    console.info("失败");
+                    //console.info("失败");
                 });        
             },
+
+            initUrls : function (){
+                var promise = up.get(),
+                    self = this ;   
+
+                promise.then(function (data){
+                    var des = [];
+
+                    data = data.data;
+                    data.forEach(function (el){
+                        des.push(ue.prototype.createByDataObj(el));   
+                    }); 
+
+                    self.urlUiEntity.initUrls(des);                     
+                }) 
+            } ,   
+
             edit : function(){
 
             },

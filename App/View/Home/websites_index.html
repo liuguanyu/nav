@@ -29,7 +29,7 @@
                     <div class="wisdom-poster js-wisdom-poster">
                         <h3>添加我的吐槽</h3>
                         <input type="text" class="ipt js-ipt" name="wisdom"/> 
-                        <button type="button" class="btn js-btn">OKay，就这个样子吧。</button>
+                        <button type="button" class="btn js-btn">OKay，就这么愉快地写完了。</button>
 
                         <a href="###" class="close js-close" title="关闭"></a>
                     </div> 
@@ -54,7 +54,7 @@
                 <div class="pct-1o5">
                     <ul class="menu">
                         <li class="active"><a target="_self" href="">常用网址</a></li>
-                        <li><a target="_self" href="">Hosts备份</a></li>
+                        <li><a target="_self" href="">云Hosts</a></li>
                         <li><a target="_self" href="">定时提醒</a></li>
                     </ul>
                 </div>
@@ -62,15 +62,8 @@
                 <div class="pct-4o5">
                     <div class="websites-container">
                         <h3 class="websites-title">您所在组的公共网址和您的收藏</h3>
-                        <ul class="websites clearfix">
-                            <% websites.forEach(function (wbs){%>
-                                <li>
-                                    <a href="<%=wbs.url%>"><%=wbs.title%></a>
+                        <ul id="websites" class="websites clearfix">
 
-                                    <i class="btn-del" title="删除"></i>
-                                    <i class="btn-edit" title="重命名"></i>
-                                </li>
-                            <%})%>
                         </ul>  
                         <i class="websites-controll" data-show-managing="返回我的网址" data-show-normal="管理我的网址">管理我的网址</i>
 

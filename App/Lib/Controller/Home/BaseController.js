@@ -6,7 +6,8 @@ module.exports = Controller(function(){
             var uuap = require("uuap"),
                 res = this.http.res ,
                 req = this.http.req ,
-                self = this ;
+                self = this ,
+                userInfoKey = "user_info";
 
             return uuap.getUserInfo(req, res).then(function (userInfo){
                 return D("User").thenAdd({
@@ -17,7 +18,22 @@ module.exports = Controller(function(){
                     user_name: userInfo.userName
                 }).then(function(uid){
                     userInfo.uid = uid;
-                    self.assign("user_info" , userInfo);
+                    self.assign(userInfoKey , userInfo);
+                }).then(function (data){
+                    var userInfo = self.assign(userInfoKey), 
+                        uid = userInfo.uid;
+
+                    return D("User_ugroup").where({"user_id" : uid}).select().then(function (data){
+                        var ugids = [];
+
+                        data.forEach(function (el){
+                            ugids.push(el.ugid);
+                        })
+
+                        userInfo.ugids = ugids;
+
+                        self.assign(userInfoKey , userInfo);
+                    });
                 });
             });
         },

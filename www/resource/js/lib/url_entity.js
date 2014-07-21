@@ -6,6 +6,7 @@ define(["md5"] , function (md5){
             this.id = opts && opts.id;
             this.domain = opts && opts.domain;
             this.type = opts && opts.type;
+            this.is_protected = opts && opts.is_protected;
             if(!url){
                 return;
             }
@@ -14,6 +15,15 @@ define(["md5"] , function (md5){
         };
 
     UrlEntity.prototype = {
+        createByDataObj : function (dataObj){
+            var de = new UrlEntity(dataObj.title , dataObj.url , {
+                id : dataObj.id , 
+                is_protected : (dataObj.is_protected ? dataObj.is_protected : 0)
+            });
+
+            return de;    
+        } ,    
+
         clearUrl : function(){ 
             var url = this.url;
             var div = document.createElement('div');
@@ -49,6 +59,10 @@ define(["md5"] , function (md5){
 
         fillId : function (id){
             this.id = id;
+        },
+
+        fillIsProtected : function (isProtected){
+            this.is_protected = isProtected;
         },
 
         getFavicon : function(){ 

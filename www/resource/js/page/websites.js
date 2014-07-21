@@ -12,5 +12,5 @@
 
 (function ($){
     /* 网址管理 */
-    require (["website_switcher"] , function (ws){});  
-})(jQuery);    
+    require (["website_entrance"] , function (ws){});  
+})(jQuery);  
