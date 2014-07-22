@@ -85,8 +85,8 @@
                 return this._fadeTip(node , "ok");
             } ,
 
-            remove : function (sid){
-
+            remove : function (node){
+                node.remove();   
             } ,
 
             edit : function (){

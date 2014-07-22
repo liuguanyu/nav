@@ -26,7 +26,13 @@
                 var act = "get" , data = {} ;
 
                 return this._send2Svc(act , data); 
-            }     
+            }  ,
+
+            remove : function (id){
+                var act = "remove" , data = {id : id} ;
+
+                return this._send2Svc(act , data); 
+            },  
         };
 
         return UrlProxy;   

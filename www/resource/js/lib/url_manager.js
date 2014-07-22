@@ -58,10 +58,17 @@
                 }) 
             } ,   
 
-            edit : function(){
+            remove : function(node){
+                var id = node.attr("data-id"),
+                    promise = up.remove(id),
+                    self = this ;
+
+                promise.then(function (data){
+                    self.urlUiEntity.remove(node);                    
+                } , function (){});    
 
             },
-            remove : function (){
+            edit : function (){
 
             },
             drag : function (){

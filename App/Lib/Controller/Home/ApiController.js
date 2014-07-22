@@ -259,6 +259,32 @@ module.exports = Controller("Home/BaseController" , function(){
                                 })
                             });   
                         });
+                    },
+                    remove : function (){
+                        if (!data.id){
+                            return this.error("1001" , "invalid act!" , {});
+                        } 
+
+                        var id = data.id;
+
+                        var promise1 = D("user_websites").where({"websites_id" : id , "user_id" : uid}).delete();
+                        var promise2 = D("user_websites_order").where({"user_id" : uid}).select().then(function (data){
+                            var websitesIdOrder = data[0].websites_id_order.split(",") , 
+                                uwoid = data[0].id;
+                                idx = websitesIdOrder.indexOf(id);
+
+                            if (-1 != idx){
+                                websitesIdOrder.splice(idx , 1); 
+                            } 
+
+                            return D("user_websites_order").where({"id" : uwoid}).update({"websites_id_order" : websitesIdOrder.join(",")}); 
+                        })   
+
+                        return Promise.all([promise1 , promise2]).then(function(res){
+                            return res;
+                        }, function(){
+                            return -1;
+                        });
                     }
                 };
 

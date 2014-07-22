@@ -43,6 +43,12 @@
                         self.um.finishEdit();
                     }    
                 }); 
+
+                this.websitesContainer.delegate(".btn-del" , "click" , function (){
+                    var node = $(this).parent("li[data-id]");
+
+                    self.um.remove(node);
+                });
             },
 
             init : function (){
