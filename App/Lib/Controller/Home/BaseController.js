@@ -28,7 +28,11 @@ module.exports = Controller(function(){
 
                         data.forEach(function (el){
                             ugids.push(el.ugid);
-                        })
+                        });
+
+                        if (ugids.length == 0 ){
+                            ugids = [0]; //默认组
+                        }
 
                         userInfo.ugids = ugids;
 

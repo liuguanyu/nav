@@ -57,7 +57,7 @@ module.exports = Controller("Home/BaseController" , function(){
                         })
 
                         .then(function (data){
-                            var promise1 = D("User_websites").thenAdd({
+                            var promise1 = D("user_websites").thenAdd({
                                 "uid" : data.uid ,
                                 "websites_id" : data.websiteId 
                             } , {
@@ -69,17 +69,24 @@ module.exports = Controller("Home/BaseController" , function(){
                                 return {};
                             });
 
-                            var promise2 = D("User_websites_order").where({"user_id" : uid}).select().then(function (udata){
-                                var id = udata[0].id , 
-                                    newId = data.websiteId ,
-                                    orders = udata[0].websites_id_order.split(",");
+                            var promise2 = D("user_websites_order").where({"user_id" : uid}).select().then(function (udata){
+                               // if (udata.length != 0){
+                                    var id = udata[0].id , 
+                                        newId = data.websiteId ,
+                                        orders = (udata[0].websites_id_order == "") 
+                                                 ? [] 
+                                                 : udata[0].websites_id_order.split(",");
 
-                                if (-1 == orders.indexOf(newId)) {
-                                     orders.push(newId) ;
-                                }             
-                                
-                                return D("User_websites_order").where({id : id}).update({"websites_id_order" : orders.join(",")});
-                            })    
+                                    if (-1 == orders.indexOf(newId)) {
+                                         orders.push(newId) ;
+                                    }           
+                                    
+                                    return D("user_websites_order").where({id : id}).update({"websites_id_order" : orders.join(",")});
+                               /* }
+                                else{
+                                    //D("User_websites_order").where({id : id}).update({"websites_id_order" : orders.join(",")});
+                                }*/
+                            });    
 
                             return Promise.all([promise1 , promise2]).then(function (res){
                                 return {
@@ -87,7 +94,6 @@ module.exports = Controller("Home/BaseController" , function(){
                                     is_protected : 0 // 暂未实现
                                 };    
                             } , function (data){
-                                console.info(data);
                                 return getPromise(-1 , true);
                             })    
                         });   
@@ -101,7 +107,8 @@ module.exports = Controller("Home/BaseController" , function(){
                             else{
                                 return data;    
                             }
-                        }).then(function (data){
+                        })
+                        .then(function (data){
                             var wbs = data[0].websites_id_order;
 
                             //找出当前用户的网址 
@@ -131,37 +138,35 @@ module.exports = Controller("Home/BaseController" , function(){
                                     wbs2 = res[2] , 
                                     node , decide;
 
-                                for(var i in wbs0){
+                                wbs0.forEach(function (el , i){
                                     node = wbs0[i];
 
-                                    decide = wbs1.some(function(el){
-                                        return node.id == el.websites_id;    
+                                    decide = wbs1.some(function(el2){
+                                        return node.id == el2.websites_id;    
                                     });
 
                                     if (decide){
                                         wbs0[i].is_protected = 1; //本组网址，不可删，不可改
-                                        continue;
                                     }
+                                    else{
+                                        decide = wbs2.some(function(el2){
+                                            return node.id == el2.websites_id;    
+                                        });
 
-                                    decide = wbs2.some(function(el){
-                                        return node.id == el.websites_id;    
-                                    });
-
-                                    if (decide){
-                                        wbs0[i].is_protected = 2; //别组网址，可删，不可改
-                                        continue;
+                                        if (decide){
+                                            wbs0[i].is_protected = 2; //别组网址，可删，不可改
+                                        }
                                     }
-                                } 
+                                }); 
 
                                 return wbs0;   
                             } , function (){
                                 return [];
-                            });   
-
+                            }); 
                         } , function (data){
                             // 组内的默认网址
-                            var promise1 = D("Ugroup_websites").where("ugid in (" + ugids.join(",") + ")").select()
-                                .then(function (data){
+                            var promise1 = D("ugroup_websites").where("ugid in (" + ugids.join(",") + ")").select()
+                                .then(function (data){                                    
                                     var wbs = [];
 
                                     data.forEach(function(el){
@@ -171,15 +176,22 @@ module.exports = Controller("Home/BaseController" , function(){
                                     return wbs; 
                                 })
                                 .then(function (data){
-                                    return D("Websites").where("id in (" + data.join(",") + ")").select().then(function(data){
-                                        return data;
-                                    });
-                                } , function (){
+                                    if (data.length){
+                                        return D("Websites").where("id in (" + data.join(",") + ")").select().then(function(data){
+                                            return data;
+                                        });
+                                    }
+                                    else{
+                                        return [];
+                                    }
+                                } , function (data){
                                     return [];
                                 });
-
+                            
                             // 当前用户的默认网址
-                            var promise2 = D("User_websites").where({"user_id" : uid}).select().then(function (data){
+                            var promise2 = D("User_websites").where({"user_id" : uid}).select()
+
+                            .then(function (data){
                                 var wbs = [];
 
                                 data.forEach(function(el){
@@ -187,7 +199,9 @@ module.exports = Controller("Home/BaseController" , function(){
                                 });
 
                                 return wbs;
-                            }).then(function (data){
+                            })
+
+                            .then(function (data){
                                 //我的私有网址
                                 var promiseMe = D("Websites").where("id in (" + data.join(",") + ")").select().then(function(data){
                                     return data;
@@ -209,44 +223,42 @@ module.exports = Controller("Home/BaseController" , function(){
                                     var pm = res[0] ,
                                         po = res[1] ;
 
-                                    for(var i in pm){
+                                    pm.forEach(function (el , i){
                                         var node = pm[i] , decide;
 
-                                        decide = po.some(function (el){
-                                            return el.websites_id == node.id;
+                                        decide = po.some(function (el2){
+                                            return el2.websites_id == node.id;
                                         });
 
                                         if (decide){
                                             pm[i].is_protected = 2;  //是别组网址 ，许删不许改     
                                         }
-                                    }
+                                    });
                                     return pm;       
                                 });                                 
                             } , function (data){
-                                return [];
-                            });
+                                return[];
+                            }); 
 
                             //消重
-                            return Promise.all([promise1 , promise2]).then(function(res){
+                            return Promise.all([promise1 , promise2]).then(function(res){    
                                 var ret = res[0] ,
-                                    retMe = res[1];
+                                    retMe = res[1] , newRet , idOrder = [] ;
 
-                                for(var i in ret){
+                                ret.forEach(function (el , i){
                                     ret[i].is_protected = 1; //是本组网址，不许删，不许改
 
-                                    for(var j in retMe){
-                                        if (ret[i].id == retMe[j].id){
+                                    retMe.forEach(function (el2 , j){
+                                        if (el.id == el2.id){
                                             retMe.splice(j , 1);
                                         }
-                                    }
-                                }
-
-                                var newRet = ret.concat(retMe) , 
-                                    idOrder = [];
-
-                                    newRet.forEach(function (el){
-                                        idOrder.push(el.id);
                                     });
+                                });
+
+                                newRet = ret.concat(retMe);
+                                newRet.forEach(function (el){
+                                    idOrder.push(el.id);
+                                });      
 
                                 //插入User_websites
                                 return D("User_websites_order").thenAdd({
@@ -254,10 +266,11 @@ module.exports = Controller("Home/BaseController" , function(){
                                     "websites_id_order" : idOrder.join(",")
                                 } , {
                                     "user_id" : uid
-                                }).then(function (){
+                                }).then(function (data){ 
                                     return newRet;
-                                })
-                            });   
+                                });
+                            }); 
+ 
                         });
                     },
                     remove : function (){
@@ -267,23 +280,42 @@ module.exports = Controller("Home/BaseController" , function(){
 
                         var id = data.id;
 
-                        var promise1 = D("user_websites").where({"websites_id" : id , "user_id" : uid}).delete();
-                        var promise2 = D("user_websites_order").where({"user_id" : uid}).select().then(function (data){
-                            var websitesIdOrder = data[0].websites_id_order.split(",") , 
-                                uwoid = data[0].id;
-                                idx = websitesIdOrder.indexOf(id);
+                        //是否是我的公用网址
+                        var promise = D("ugroup_websites").where("websites_id="+id+" and ugid in (" + ugids.join(",") + ")").select(); 
 
-                            if (-1 != idx){
-                                websitesIdOrder.splice(idx , 1); 
-                            } 
+                        var doRemove = function (){
+                            var promise1 = D("user_websites").where({"websites_id" : id , "user_id" : uid}).delete();
+                            var promise2 = D("user_websites_order").where({"user_id" : uid}).select().then(function (data){
+                                var websitesIdOrder = data[0].websites_id_order.split(",") , 
+                                    uwoid = data[0].id;
+                                    idx = websitesIdOrder.indexOf(id);
 
-                            return D("user_websites_order").where({"id" : uwoid}).update({"websites_id_order" : websitesIdOrder.join(",")}); 
-                        })   
+                                console.info(websitesIdOrder);    
 
-                        return Promise.all([promise1 , promise2]).then(function(res){
-                            return res;
-                        }, function(){
-                            return -1;
+                                if (-1 != idx){
+                                    websitesIdOrder.splice(idx , 1); 
+                                } 
+                                console.info(websitesIdOrder , 299);
+
+                                return D("user_websites_order").where({"id" : uwoid}).update({"websites_id_order" : websitesIdOrder.join(",")}); 
+                            })   
+
+                            return Promise.all([promise1 , promise2]).then(function(res){
+                                return res;
+                            }, function(){
+                                return -1;
+                            });
+                        };
+
+                        return promise.then(function (data){
+                            if (0 == data.length){
+                                return doRemove();
+                            }  
+                            else{
+                                return getPromise(-1 , true);            
+                            }   
+                        } , function (){
+                            return doRemove();     
                         });
                     }
                 };
