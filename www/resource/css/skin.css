@@ -116,19 +116,20 @@ html {
     color:#e60012;
 }
 
-.websites li{
+.websites a{
     border:.1em dotted #ccc;
     border-radius: 2px;
+    text-decoration: none;
 }
 
-.websites li a{
+.websites a li{
     background: #ffffef;
     text-decoration: none;
     color:#333;
     font-size : 1em;
 }
 
-.websites li a:hover{
+.websites a:hover li{
     background: #d6f5ff;
 }
 
@@ -153,6 +154,14 @@ html {
 
 .tips-error {
     background-color:#fcc; 
+}
+
+.managing a {
+    cursor : move;
+}
+
+.websites .moving li{
+    color:#ddd;
 }
 
 .managing .btn-del ,
@@ -189,11 +198,11 @@ html {
     display: none;
 }
 
-.websites .protected1 a , .websites .protected2 a{
+.websites .protected1 li , .websites .protected2 li{
     background:url(http://p2.qhimg.com/t01cc73f5cf28be899c.png) no-repeat;
 }
 
-.websites .protected1 a:hover , .websites .protected2 a:hover{
+.websites .protected1 li:hover , .websites .protected2 li:hover{
     background:url(http://p5.qhimg.com/t0151e54043512d1d2e.png) no-repeat;
 }
 

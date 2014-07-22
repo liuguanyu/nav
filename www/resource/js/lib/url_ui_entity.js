@@ -1,6 +1,6 @@
 (function ($){
     define([] , function (){
-        var tpl = '<li class="{$class}" data-id="{$id}" data-sid="{$sid}"><a href="{$link}"><img class="favico" src="{$favicon}"/>{$title}</a><i class="btn-del" title="删除"></i><i class="btn-edit" title="重命名"></i></li>';    
+        var tpl = '<a class="{$class}" href="{$link}" data-id="{$id}" data-sid="{$sid}"><li draggable="true"><img class="favico" src="{$favicon}"/>{$title}<i class="btn-del" title="删除"></i><i class="btn-edit" title="重命名"></i></li></a>';    
         var getAbsolute = function (dom){
             var rect = dom.getBoundingClientRect() , newRect = {};
 
@@ -66,6 +66,11 @@
 
             },
 
+            _buildDragProxy : function (node){
+
+
+            },
+
             initUrls : function (des){
                 var htmls = [] , 
                     self = this;
@@ -88,7 +93,7 @@
                     return dtd.reject({errno : 102 , errmsg : "网址为空"});
                 } 
 
-                repeatNode = this.container.find("li[data-sid=" + ue.sid + "]"); 
+                repeatNode = this.container.find("a[data-sid=" + ue.sid + "]"); 
                 if (repeatNode.length) {
                     return dtd.reject({errno : 103 , errmsg : "重复网址"});
                 }
@@ -98,7 +103,7 @@
 
             showRepeat : function (node){
                 var sid = node.sid ,
-                    repeatNode =  this.container.find("li[data-sid=" + sid + "]");  
+                    repeatNode =  this.container.find("a[data-sid=" + sid + "]");  
 
                 this._fadeTip(repeatNode , "error");
             },
@@ -117,11 +122,7 @@
 
             edit : function (){
 
-            } ,
-
-            drag : function (){
-                
-            }
+            } 
         };
 
         

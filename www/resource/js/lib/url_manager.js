@@ -39,7 +39,8 @@
 
                         self.handler.nameIpt.val("");
                         self.handler.urlIpt.val("");   
-                    }).fail(function (data){
+                    })
+                    .fail(function (data){
                         switch(data.errno){
                             case 101:
                                 self.handler.nameIpt.siblings(".error").html("请您填写网站名称");   
@@ -74,7 +75,7 @@
             remove : function(node){
                 var id = node.attr("data-id"),
                     promise = up.remove(id),
-                    self = this ;
+                    self = this ; 
 
                 promise.then(function (data){
                     self.urlUiEntity.remove(node);                    
@@ -84,8 +85,8 @@
             edit : function (){
 
             },
-            drag : function (){
-
+            dragStart : function (evt , obj){
+                this.urlUiEntity.dragStart(evt , obj); 
             }
         };    
 

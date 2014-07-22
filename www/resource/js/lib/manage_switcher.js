@@ -21,7 +21,7 @@
 
                 $(this.websitesShowerDom).addClass("managing");
                 $(this.managerDom).show();
-
+                $(this.websitesShowerDom).find("li").attr("draggable" , true);
                 this.status = "managing";
             }, 
 
@@ -32,6 +32,7 @@
                 $(this.websitesShowerDom).removeClass("managing");
                 $(this.managerDom).hide();
 
+                $(this.websitesShowerDom).find("li").attr("draggable" , false);
                 this.status = "normal";                
             },
 
