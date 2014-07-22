@@ -624,7 +624,7 @@
                         var sid = this.suggestList.attr("id") , lastDom;
 
         		        if (!lastDoms[sid]){
-        		            lastDom = this._dom.offset();
+        		            lastDom = this._dom[0].getBoundingClientRect();
                             lastDom.forid = sid;
                             lastDoms[sid] = lastDom;
         		            this._resetPos();    
@@ -636,8 +636,9 @@
     		}).apply(this),
     		
     		_resetPos : function (){
-    		    var offset = this._dom[0].getBoundingClientRect(),
-    		        adjust = this.posAdjust ; 
+    		    var offseter = this._dom[0].getBoundingClientRect(),
+    		        adjust = this.posAdjust ,
+                    offset = {};         
 
     		    this.suggestList.css({
                     "position" : "absolute",

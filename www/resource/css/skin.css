@@ -185,6 +185,13 @@ html {
     display: none;
 }
 
+.websites .protected1 a , .websites .protected2 a{
+    background:url(http://p2.qhimg.com/t01cc73f5cf28be899c.png) no-repeat;
+}
+
+.websites .protected1 a:hover , .websites .protected2 a:hover{
+    background:url(http://p5.qhimg.com/t0151e54043512d1d2e.png) no-repeat;
+}
 
 .website-manage-panel {
     display: none;

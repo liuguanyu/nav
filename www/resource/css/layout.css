@@ -162,10 +162,13 @@
 .websites li a {
     display:block;
     padding:0 .5em;
+    padding-right: 1.4em;
     width : 10em ;
     height: 3em;
     line-height: 3em;
     overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .websites .favico {
