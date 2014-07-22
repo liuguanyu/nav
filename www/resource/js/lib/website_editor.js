@@ -50,8 +50,10 @@
                     self.um.remove(node);
                 });
 
-                this.editContainer.find("input[type=text]").on("keypress" , function (){
-                    self.editContainer.find(".error").html("");
+                this.editContainer.find("input[type=text]").on("keypress" , function (e){
+                    if (e.keyCode != 13){
+                        self.editContainer.find(".error").html("");
+                    }    
                 })
             },
 
