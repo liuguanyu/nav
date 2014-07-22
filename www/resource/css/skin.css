@@ -8,6 +8,10 @@ html {
     background: url(http://p1.qhimg.com/d/_hao360/my360/2/inner_bg5.jpg) no-repeat top center ;
 }
 
+.error {
+    color : #e60012;
+}
+
 .hd {
     border : .1em solid #b7b7b7;
     border-radius : .8em;

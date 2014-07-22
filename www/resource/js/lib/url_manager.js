@@ -26,20 +26,33 @@
             },
             add : function (){
                 var urlEntity = new ue(this.handler.nameIpt.val() , this.handler.urlIpt.val()) ,   
-                    promise = up.add(urlEntity.name , urlEntity.url) ,
                     urlUiEntity = this.urlUiEntity ,
-                    self = this;
-                    
-                promise.done(function (data){
-                    urlEntity.fillId(data.data.id);
-                    urlEntity.fillIsProtected(data.data.is_protected);
-                    urlUiEntity.add(urlEntity).always(function (){
+                    self = this ,
+                    promise = urlUiEntity.canAdd(urlEntity)   
+                    .then(function (){
+                        return up.add(urlEntity.name , urlEntity.url);
+                    })
+                    .done(function (data){
+                        urlEntity.fillId(data.data.id);
+                        urlEntity.fillIsProtected(data.data.is_protected);
+                        urlUiEntity.add(urlEntity);
+
                         self.handler.nameIpt.val("");
-                        self.handler.urlIpt.val("");    
-                    });
-                }).fail(function (data){
-                    //console.info("失败");
-                });        
+                        self.handler.urlIpt.val("");   
+                    }).fail(function (data){
+                        switch(data.errno){
+                            case 101:
+                                self.handler.nameIpt.siblings(".error").html("请您填写网站名称");   
+                                break; 
+                            case 102:
+                                self.handler.urlIpt.siblings(".error").html("请您填写网址");   
+                                break; 
+                            case 103:
+                                self.handler.urlIpt.siblings(".error").html("您已经填写过这个网址"); 
+                                urlUiEntity.showRepeat(urlEntity);  
+                                break;
+                        }
+                    });        
             },
 
             initUrls : function (){

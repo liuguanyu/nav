@@ -49,6 +49,10 @@
 
                     self.um.remove(node);
                 });
+
+                this.editContainer.find("input[type=text]").on("keypress" , function (){
+                    self.editContainer.find(".error").html("");
+                })
             },
 
             init : function (){

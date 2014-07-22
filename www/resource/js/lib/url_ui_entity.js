@@ -77,6 +77,32 @@
                 this.container.append($(htmls.join("")));  
             },
 
+            canAdd : function (ue){
+                var dtd = $.Deferred();
+
+                if ($.trim(ue.name) == ""){
+                    return dtd.reject({errno : 101 , errmsg : "网站名为空"});
+                } 
+  
+                if ($.trim(ue.url) == ""){
+                    return dtd.reject({errno : 102 , errmsg : "网址为空"});
+                } 
+
+                repeatNode = this.container.find("li[data-sid=" + ue.sid + "]"); 
+                if (repeatNode.length) {
+                    return dtd.reject({errno : 103 , errmsg : "重复网址"});
+                }
+
+                return dtd.resolve();
+            }, 
+
+            showRepeat : function (node){
+                var sid = node.sid ,
+                    repeatNode =  this.container.find("li[data-sid=" + sid + "]");  
+
+                this._fadeTip(repeatNode , "error");
+            },
+
             add : function (ue){
                 var html = this._buildHtml(ue),
                     node = $(html).css({"visbility" : "hidden"});

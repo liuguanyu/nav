@@ -57,14 +57,16 @@ module.exports = Controller("Home/BaseController" , function(){
                         })
 
                         .then(function (data){
+                            var websiteId = data.websiteId;
+
                             var promise1 = D("user_websites").thenAdd({
                                 "uid" : data.uid ,
-                                "websites_id" : data.websiteId 
+                                "websites_id" : websiteId 
                             } , {
-                                "websites_id" : data.websiteId ,                                
+                                "websites_id" : websiteId ,                                
                                 "uid" : data.uid 
-                            }).then(function (data){
-                                return data.websites_id;    
+                            }).then(function (){
+                                return websiteId;    
                             } , function (){
                                 return {};
                             });
@@ -89,6 +91,7 @@ module.exports = Controller("Home/BaseController" , function(){
                             });    
 
                             return Promise.all([promise1 , promise2]).then(function (res){
+                                console.info(res);
                                 return {
                                     id : res[0],
                                     is_protected : 0 // 暂未实现
