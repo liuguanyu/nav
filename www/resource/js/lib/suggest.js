@@ -33,6 +33,19 @@
  */
 (function ($){
     define(['str_util'] , function(){
+        var getAbsolute = function (dom){
+            var rect = dom.getBoundingClientRect() , newRect = {};
+
+            $.extend(newRect , rect);
+
+            newRect.left = rect.left + (document.body.scrollLeft || document.documentElement.scrollLeft) ;
+            newRect.right = rect.right + (document.body.scrollLeft || document.documentElement.scrollLeft) ;
+
+            newRect.top = rect.top + (document.body.scrollTop || document.documentElement.scrollTop) ;
+            newRect.bottom = rect.bottom + (document.body.scrollTop || document.documentElement.scrollTop) ;     
+
+            return newRect;     
+        };
         var noEventKeycode = [9,16,17,18,19,20,33,34,35,36,37,39,41,42,43,45,47] ,
             getConstructorName = function (o) { 
                 if(o != null && o.constructor != null){
@@ -610,7 +623,7 @@
         
     		_fixPos : (function (){
     		    var lastDoms = {} , doFix = function (){
-                    var domPos = this._dom[0].getBoundingClientRect() ,
+                    var domPos = getAbsolute(this._dom[0]) ,
                         lastDom = lastDoms[this.suggestList.attr("id")];
 
                     if (domPos.left != lastDom.left || domPos.top != lastDom.top || domPos.forid != lastDom.forid){
@@ -624,7 +637,7 @@
                         var sid = this.suggestList.attr("id") , lastDom;
 
         		        if (!lastDoms[sid]){
-        		            lastDom = this._dom[0].getBoundingClientRect();
+        		            lastDom = getAbsolute(this._dom[0]) ;
                             lastDom.forid = sid;
                             lastDoms[sid] = lastDom;
         		            this._resetPos();    
@@ -636,9 +649,8 @@
     		}).apply(this),
     		
     		_resetPos : function (){
-    		    var offseter = this._dom[0].getBoundingClientRect(),
-    		        adjust = this.posAdjust ,
-                    offset = {};         
+    		    var offset = getAbsolute(this._dom[0]) ,
+    		        adjust = this.posAdjust ;      
 
     		    this.suggestList.css({
                     "position" : "absolute",

@@ -1,7 +1,19 @@
 (function ($){
     define([] , function (){
         var tpl = '<li class="{$class}" data-id="{$id}" data-sid="{$sid}"><a href="{$link}"><img class="favico" src="{$favicon}"/>{$title}</a><i class="btn-del" title="删除"></i><i class="btn-edit" title="重命名"></i></li>';    
+        var getAbsolute = function (dom){
+            var rect = dom.getBoundingClientRect() , newRect = {};
 
+            $.extend(newRect , rect);
+
+            newRect.left = rect.left + (document.body.scrollLeft || document.documentElement.scrollLeft) ;
+            newRect.right = rect.right + (document.body.scrollLeft || document.documentElement.scrollLeft) ;
+
+            newRect.top = rect.top + (document.body.scrollTop || document.documentElement.scrollTop) ;
+            newRect.bottom = rect.bottom + (document.body.scrollTop || document.documentElement.scrollTop) ;     
+
+            return newRect;     
+        };
         var UrlUiEntity = function (container){
             this.container = container;
             this.tips = $("#js-tips");
@@ -14,7 +26,7 @@
                     interval = 500;
 
                 return function (node , type){
-                    var rect = node[0].getBoundingClientRect(),
+                    var rect = getAbsolute(node[0]),
                         tips = this.tips,
                         myCss = (type == "error") ? errorCss : okCss ,
                         protectedCss = (node.is_protected) ? "protected1" : "false"; 
