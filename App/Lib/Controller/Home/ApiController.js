@@ -1,6 +1,7 @@
 /**
  * controller
  * @return 
+ * 急需重构,放到model
  */
 module.exports = Controller("Home/BaseController" , function(){
     //"use strict";
@@ -322,7 +323,7 @@ module.exports = Controller("Home/BaseController" , function(){
                         var promise = D("ugroup_websites").where("websites_id="+id+" and ugid in (" + ugids.join(",") + ")").select(); 
 
                         var doRemove = function (){
-                            var promise1 = D("user_websites").where({"websites_id" : id , "user_id" : uid}).delete();
+                            var promise1 = D("user_websites").where({"websites_id" : id , "uid" : uid}).delete();
                             var promise2 = D("user_websites_order").where({"user_id" : uid}).select().then(function (data){
                                 var websitesIdOrder = data[0].websites_id_order.split(",") , 
                                     uwoid = data[0].id;
@@ -374,16 +375,66 @@ module.exports = Controller("Home/BaseController" , function(){
                             name = data.name ,
                             url = data.url;
 
-                        return D("ugroup_websites").where({"websites_id" : id}).select().then(function (uwdata){
-                            /* 公共网址不能改 */
-                            if (uwdata.length != 0){
-                                return getPromise("1004" , true);
-                            }  
+                        //先看看是不是这个ID对应这个网址  
+                        return D("websites").where({id : id}).select().then(function (cdata){
+                            //没取到 
+                            if (cdata.length == 0){
+                                return getPromise(1007 , true);
+                            } 
                             else{
+                                var urlOri = cdata[0].url;
+
+                                if (urlOri == url){ //还是这个网址
+                                    return getPromise([]);   
+                                }
+                                else{ //网址不一样了 , 转化为两个请求：1）删除原有网址隶属关系 2）新增网址隶属关系,我擦，这么多嵌套，不改不行啊！
+                                    var md5Url = md5(url);
+
+                                    return D("user_websites").select({uid : uid , id : id}).delete().then(function (){
+                                        return D("websites").where({url_md5 : md5Url}).select().then(function (nudata){
+                                            if (nudata.length == 0){
+                                                return getPromise([] , true);
+                                            } 
+                                            else{
+                                                var oldId = id;
+                                                id = nudata[0].id; //更新为新ID
+
+                                                //更新websites_order
+                                                return D("user_websites_order").where({id : uid}).select().then(function (data){
+                                                    if (data.length == 0){
+                                                        return getPromise({} , true);
+                                                    }    
+                                                    else{
+                                                        var websitesOrderId = data[0].user_websites_order.split(",") , 
+                                                            idx = websitesOrderId.indexOf(oldId); //更新Id
+
+                                                        if (-1 != idx){
+                                                            websitesOrderId.splice(idx , 1 , id);
+                                                        }    
+
+                                                        return D("user_websites_order").select({id : uid}).update({
+                                                            websites_id_order : websitesOrderId.join(",")    
+                                                        });
+                                                    }    
+                                                })
+                                            }   
+                                        }) 
+                                    });   
+                                }
+                            }   
+                        })  
+                        .then(function (){    
+                            return D("ugroup_websites").where({"websites_id" : id}).select().then(function (uwdata){
+                                /* 公共网址不能改 */
+                                if (uwdata.length != 0){
+                                    return getPromise("1004" , true);
+                                }  
+                                else{
+                                    return getPromise([]);
+                                }  
+                            } , function (){
                                 return getPromise([]);
-                            }  
-                        } , function (){
-                            return getPromise([]);
+                            })
                         })
 
                         .then(function (){

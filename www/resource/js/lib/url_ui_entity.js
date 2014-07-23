@@ -94,11 +94,16 @@
                 repeatNode = this.container.find("a[data-sid=" + ue.sid + "]"); 
 
                 if (dataId !== undefined){
-                    if (dataId == repeatNode.attr("data-id")){
+                    if (dataId == repeatNode.attr("data-id") && repeatNode.attr("data-id") !== undefined){
                         return dtd.resolve();
                     }
                     else{
-                        return dtd.reject({errno : 103 , errmsg : "重复网址"});
+                        if (repeatNode.attr("data-id")){
+                            return dtd.reject({errno : 103 , errmsg : "重复网址"});
+                        }
+                        else {
+                            return dtd.resolve();
+                        }
                     }
                 }    
 
