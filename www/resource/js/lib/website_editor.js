@@ -25,6 +25,13 @@
                 this.um.initUrls();
             },
 
+            _installDrag : function (){
+                this.um.dragger("li[draggable=true]" , "a[data-sid]" , {
+                    moving     : "moving" ,
+                    dragover   : "dragover"
+                });
+            },
+
             _bindEvent : function (){
                 var self = this ;                
 
@@ -64,9 +71,17 @@
                 }); 
 
 
+                /*
                 this.websitesContainer.delegate("li[draggable=true]" , "dragstart" , function (e){
                     $(e.target).parent("a").addClass("moving");
-                });                              
+                });  
+
+                this.websitesContainer.delegate("li[draggable=true]" , "dragover" , function (e){
+                    //$(e.target).parent("a").addClass("moving");
+                    e.preventDefault();
+                    console.info(e.target);
+                });  
+                */                            
             },
 
             init : function (){
@@ -74,6 +89,7 @@
                 this._initUrls();
                 this._installSuggest();  
                 this._bindEvent(); 
+                this._installDrag();
             }   
         };
 

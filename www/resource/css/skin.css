@@ -164,6 +164,98 @@ html {
     color:#ddd;
 }
 
+.websites .dragover {
+    -webkit-animation:dragoverme 1.5s linear infinite;
+    -moz-animation:dragoverme 1.5s linear infinite;
+    -ms-animation:dragoverme 1.5s linear infinite;    
+    animation:dragoverme 1.5s linear infinite;    
+}
+
+@-webkit-keyframes dragoverme{
+    0%{
+        opacity:.1;
+    }   
+    20%{
+        opacity:1;
+    }
+    40%{
+        opacity:.1;
+    }
+    60%{
+        opacity:1;
+    }  
+    80%{
+        opacity:.1;
+    }             
+    100%{
+        opacity:1;
+    }
+}
+
+@-moz-keyframes dragoverme{
+    0%{
+        opacity:.1;
+    }   
+    20%{
+        opacity:1;
+    }
+    40%{
+        opacity:.1;
+    }
+    60%{
+        opacity:1;
+    }  
+    80%{
+        opacity:.1;
+    }             
+    100%{
+        opacity:1;
+    }
+}
+
+
+@-ms-keyframes dragoverme{
+    0%{
+        opacity:.1;
+    }   
+    20%{
+        opacity:1;
+    }
+    40%{
+        opacity:.1;
+    }
+    60%{
+        opacity:1;
+    }  
+    80%{
+        opacity:.1;
+    }             
+    100%{
+        opacity:1;
+    }
+}
+
+@keyframes dragoverme{
+    0%{
+        opacity:.1;
+    }   
+    20%{
+        opacity:1;
+    }
+    40%{
+        opacity:.1;
+    }
+    60%{
+        opacity:1;
+    }  
+    80%{
+        opacity:.1;
+    }             
+    100%{
+        opacity:1;
+    }
+}
+
 .managing .btn-del ,
 .managing .btn-edit , 
 .tips .btn-del , 

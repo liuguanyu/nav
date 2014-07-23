@@ -109,7 +109,7 @@ module.exports = Controller("Home/BaseController" , function(){
                             var wbs = data[0].websites_id_order;
 
                             //找出当前用户的网址 
-                            var promise1 = D("websites").where("id in (" + wbs + ")").select().then(function (data){
+                            var promise1 = D("websites").where("id in (" + wbs + ")").order("find_in_set (id , '" + wbs + "')").select().then(function (data){
                                 return data;
                             } , function (){
                                 return [];    
@@ -141,9 +141,9 @@ module.exports = Controller("Home/BaseController" , function(){
                             })
 
                             return Promise.all([promise1 , promise2 , promise3]).then(function(res){
-                                var wbs0 = res[0] ,
-                                    wbs1 = res[1] ,
-                                    wbs2 = res[2] , 
+                                var wbs0 = res[0] , //本人私藏
+                                    wbs1 = res[1] , //本组公用
+                                    wbs2 = res[2] , //其他组公用
                                     node , decide;
 
                                 /* 先合并别的组的网址 */    
@@ -157,24 +157,26 @@ module.exports = Controller("Home/BaseController" , function(){
                                     if (decide){
                                         wbs0[i].is_protected = 2; //别组网址，可删，不可改
                                     }                                    
-                                });   
+                                }); 
 
-                                /* 本组默认的放在最前 */
-                                wbs1.forEach(function (el , i){
-                                    node = wbs1[i];
+                                wbs0.forEach(function (el , i){
+                                    node = wbs0[i];
+                                    //wbs1[i].is_protected = 1 ; //本组网址，不可删，不可改
 
-                                    wbs1[i].is_protected = 1 ; //本组网址，不可删，不可改
+                                    wbs1.forEach(function(el2 , j){
+                                        wbs1[j].is_protected = 1; //本组网址，不可删，不可改
 
-                                    wbs0.forEach(function(el2 , j){
                                         if (node.id == el2.id){
-                                            wbs0.splice(j , 1);
+                                            wbs1.splice(j , 1);
+                                            wbs0[i].is_protected = 1; //本组网址，不可删，不可改
                                         }    
                                     });
                                 });
 
-                                wbs1 = wbs1.concat(wbs0);  
+                                console.info(wbs0,176);
 
-                                console.log(wbs1);
+                                /* 本组默认的放在最后 */
+                                wbs0 = wbs0.concat(wbs1);  
 
                                 /*    
                                 wbs0.forEach(function (el , i){
@@ -198,8 +200,8 @@ module.exports = Controller("Home/BaseController" , function(){
                                     }
                                 }); 
                                 */
-
-                                return wbs1;   
+console.info(wbs0);
+                                return wbs0;   
                             } , function (){
                                 return [];
                             }); 
@@ -313,7 +315,7 @@ module.exports = Controller("Home/BaseController" , function(){
  
                         });
                     },
-                    remove : function (){
+                    remove : function (data){
                         if (!data.id){
                             return this.error("1001" , "invalid act!" , {});
                         } 
@@ -354,6 +356,20 @@ module.exports = Controller("Home/BaseController" , function(){
                             }   
                         } , function (){
                             return doRemove();     
+                        });
+                    },
+
+                    drag : function (data){
+                        var newOrder = data.new_order , orderStr;
+
+                        if (newOrder.length == 0){
+                            return getPromise(1002 , true) ;  
+                        } 
+
+                        orderStr = newOrder.join(",");  
+
+                        return D("user_websites_order").where({user_id : uid}).update({
+                            "websites_id_order" : orderStr    
                         });
                     }
                 };

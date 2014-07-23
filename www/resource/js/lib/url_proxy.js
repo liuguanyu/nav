@@ -33,6 +33,12 @@
 
                 return this._send2Svc(act , data); 
             },  
+
+            drag : function (newOrder){
+                var act = "drag" , data = {new_order : newOrder} ;
+
+                return this._send2Svc(act , data);                
+            }
         };
 
         return UrlProxy;   

@@ -66,11 +66,6 @@
 
             },
 
-            _buildDragProxy : function (node){
-
-
-            },
-
             initUrls : function (des){
                 var htmls = [] , 
                     self = this;
@@ -119,6 +114,16 @@
             remove : function (node){
                 node.remove();   
             } ,
+
+            getMyNewOrder : function (){
+                var dtd = $.Deferred(),ids = [];
+
+                this.container.find("a[data-id]").toArray().forEach(function (el){
+                    ids.push($(el).attr("data-id"));
+                }); 
+
+                return dtd.resolve(ids);
+            },
 
             edit : function (){
 

@@ -85,8 +85,65 @@
             edit : function (){
 
             },
-            dragStart : function (evt , obj){
-                this.urlUiEntity.dragStart(evt , obj); 
+
+            dealDrag : function (){
+                var urlUiEntity = this.urlUiEntity;
+
+                urlUiEntity.getMyNewOrder().then(function (data){
+                    return up.drag(data);
+                }).fail(function (data){
+
+                });    
+            },    
+
+            dragger : function (selector , parentSelector , csses){
+                var dragging ,
+                    con = this.siteContainer,
+                    self = this;
+
+                con.delegate(selector , "dragstart" , function (e){
+                    var tar = $(e.target).parent(parentSelector);
+
+                    tar.addClass(csses.moving);  
+                    dragging = tar;
+                });
+
+                con.delegate(selector , "dragover" , function (e){
+                    var tar = $(e.target).parent(parentSelector) , handler;
+
+                    e.preventDefault();
+
+                    handler = setTimeout(function (){
+                        if (tar.attr("data-id") == dragging.attr("data-id")){
+                            return ;
+                        }
+                        clearTimeout(handler);
+
+                        tar.siblings("."+csses.dragover).removeClass(csses.dragover);    
+                        tar.addClass(csses.dragover);
+                    } , 100);    
+                });
+
+                con.delegate(selector , "drop" , function (e){
+                    var tar = $(e.target).parent(parentSelector);
+
+                    var cleanUp = function (){
+                        dragging.removeClass(csses.moving);
+                        dragging.siblings("."+csses.dragover).removeClass(csses.dragover);
+                    }
+
+                    if (tar.attr("data-id") == dragging.attr("data-id")){
+                        cleanUp();
+                        return ;
+                    }  
+
+                    dragging.insertBefore(tar);
+
+                    setTimeout (function (){
+                        cleanUp();
+                        self.dealDrag();  
+                    } , 200);
+                });
             }
         };    
 
