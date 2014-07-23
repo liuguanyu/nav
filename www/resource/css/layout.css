@@ -13,6 +13,20 @@
     padding : .8em;
 }
 
+.ft {
+   margin : 0 auto;
+   margin-bottom: 1.8em; 
+   width : 100%;
+}
+
+.ft .container{
+    padding : 1em 0;
+    width : 100%; 
+    height : 1.6em;
+    line-height: 1.6em;
+    text-align: center;
+}
+
 .sub-title{
     line-height: 1.4em;
     height:1.8em;
@@ -258,4 +272,10 @@
     height: 30px;
     line-height: 30px;
     overflow: hidden;
+}
+
+.glyphicon-github {
+    display: inline-block;
+    width: 1.6em;
+    height: 1.6em;
 }
