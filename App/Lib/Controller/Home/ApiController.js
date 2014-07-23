@@ -97,7 +97,7 @@ module.exports = Controller("Home/BaseController" , function(){
                     } ,
 
                     get : function (){
-                        return D("User_websites_order").where({"user_id" : uid}).select().then(function (data){
+                        return D("user_websites_order").where({"user_id" : uid}).select().then(function (data){
                             if (data.length == 0){ //没有结果,去失败分支
                                 return getPromise(0 , true);    
                             }   
@@ -216,7 +216,7 @@ module.exports = Controller("Home/BaseController" , function(){
                                 })
                                 .then(function (data){
                                     if (data.length){
-                                        return D("Websites").where("id in (" + data.join(",") + ")").select().then(function(data){
+                                        return D("websites").where("id in (" + data.join(",") + ")").select().then(function(data){
                                             return data;
                                         });
                                     }
@@ -228,7 +228,7 @@ module.exports = Controller("Home/BaseController" , function(){
                                 });
                             
                             // 当前用户的默认网址
-                            var promise2 = D("User_websites").where({"user_id" : uid}).select()
+                            var promise2 = D("user_websites").where({"uid" : uid}).select()
 
                             .then(function (data){
                                 var wbs = [];
@@ -236,7 +236,6 @@ module.exports = Controller("Home/BaseController" , function(){
                                 data.forEach(function(el){
                                     wbs.push(el.websites_id);
                                 });
-
                                 return wbs;
                             })
 
@@ -260,7 +259,7 @@ module.exports = Controller("Home/BaseController" , function(){
                                 
                                 return Promise.all([promiseMe , promiseOtherGroup]).then(function (res){
                                     var pm = res[0] ,
-                                        po = res[1] ;
+                                        po = res[1] ;    
 
                                     pm.forEach(function (el , i){
                                         var node = pm[i] , decide;
@@ -416,8 +415,6 @@ module.exports = Controller("Home/BaseController" , function(){
                                 else{
                                     return getPromise("1006" , true);  
                                 } 
-                            } , function (data){
-                                console.info(data);    
                             });   
                         });     
                     }
