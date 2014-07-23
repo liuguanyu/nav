@@ -72,26 +72,20 @@ module.exports = Controller("Home/BaseController" , function(){
                             });
 
                             var promise2 = D("user_websites_order").where({"user_id" : uid}).select().then(function (udata){
-                               // if (udata.length != 0){
-                                    var id = udata[0].id , 
-                                        newId = data.websiteId ,
-                                        orders = (udata[0].websites_id_order == "") 
-                                                 ? [] 
-                                                 : udata[0].websites_id_order.split(",");
+                                var id = udata[0].id , 
+                                    newId = data.websiteId ,
+                                    orders = (udata[0].websites_id_order == "") 
+                                             ? [] 
+                                             : udata[0].websites_id_order.split(",");
 
-                                    if (-1 == orders.indexOf(newId)) {
-                                         orders.push(newId) ;
-                                    }           
-                                    
-                                    return D("user_websites_order").where({id : id}).update({"websites_id_order" : orders.join(",")});
-                               /* }
-                                else{
-                                    //D("User_websites_order").where({id : id}).update({"websites_id_order" : orders.join(",")});
-                                }*/
+                                if (-1 == orders.indexOf(newId)) {
+                                     orders.push(newId) ;
+                                }           
+                                
+                                return D("user_websites_order").where({id : id}).update({"websites_id_order" : orders.join(",")});
                             });    
 
                             return Promise.all([promise1 , promise2]).then(function (res){
-                                console.info(res);
                                 return {
                                     id : res[0],
                                     is_protected : 0 // 暂未实现
@@ -115,21 +109,32 @@ module.exports = Controller("Home/BaseController" , function(){
                             var wbs = data[0].websites_id_order;
 
                             //找出当前用户的网址 
-                            var promise1 = D("Websites").where("id in (" + wbs + ")").select().then(function (data){
+                            var promise1 = D("websites").where("id in (" + wbs + ")").select().then(function (data){
                                 return data;
                             } , function (){
                                 return [];    
                             });   
 
                             //找出是本组默认网址的。    
-                            var promise2 = D("Ugroup_websites").where("ugid in (" + ugids.join(",") + ")").select().then(function (data){
-                                return data;
+                            var promise2 = D("ugroup_websites").where("ugid in (" + ugids.join(",") + ")").select().then(function (data){
+                                //return data;
+                                var ids = [];
+
+                                data.forEach(function (el){
+                                    ids.push(el.websites_id);
+                                });
+
+                                return D("websites").where("id in (" + ids.join(",") + ")").select().then(function (data){
+                                    return data;
+                                } , function (){
+                                    return [];
+                                })
                             } , function (){
                                 return [];    
                             });
 
                             //别组的默认网址
-                            var promise3 = D("Ugroup_websites").where("ugid not in (" + ugids.join(",") + ") and websites_id in (" + wbs + ")").select().then(function (data){
+                            var promise3 = D("ugroup_websites").where("ugid not in (" + ugids.join(",") + ") and websites_id in (" + wbs + ")").select().then(function (data){
                                 return data;
                             } , function (){
                                 return [];    
@@ -141,6 +146,37 @@ module.exports = Controller("Home/BaseController" , function(){
                                     wbs2 = res[2] , 
                                     node , decide;
 
+                                /* 先合并别的组的网址 */    
+                                wbs0.forEach(function (el , i){
+                                    node = wbs0[i];
+
+                                    decide = wbs2.some(function(el2){
+                                        return node.id == el2.websites_id;    
+                                    });
+
+                                    if (decide){
+                                        wbs0[i].is_protected = 2; //别组网址，可删，不可改
+                                    }                                    
+                                });   
+
+                                /* 本组默认的放在最前 */
+                                wbs1.forEach(function (el , i){
+                                    node = wbs1[i];
+
+                                    wbs1[i].is_protected = 1 ; //本组网址，不可删，不可改
+
+                                    wbs0.forEach(function(el2 , j){
+                                        if (node.id == el2.id){
+                                            wbs0.splice(j , 1);
+                                        }    
+                                    });
+                                });
+
+                                wbs1 = wbs1.concat(wbs0);  
+
+                                console.log(wbs1);
+
+                                /*    
                                 wbs0.forEach(function (el , i){
                                     node = wbs0[i];
 
@@ -161,8 +197,9 @@ module.exports = Controller("Home/BaseController" , function(){
                                         }
                                     }
                                 }); 
+                                */
 
-                                return wbs0;   
+                                return wbs1;   
                             } , function (){
                                 return [];
                             }); 
@@ -293,12 +330,10 @@ module.exports = Controller("Home/BaseController" , function(){
                                     uwoid = data[0].id;
                                     idx = websitesIdOrder.indexOf(id);
 
-                                console.info(websitesIdOrder);    
 
                                 if (-1 != idx){
                                     websitesIdOrder.splice(idx , 1); 
                                 } 
-                                console.info(websitesIdOrder , 299);
 
                                 return D("user_websites_order").where({"id" : uwoid}).update({"websites_id_order" : websitesIdOrder.join(",")}); 
                             })   
