@@ -1,6 +1,6 @@
 (function ($){
-    define([] , function (){
-        var tpl = '<a class="{$class}" href="{$link}" data-id="{$id}" data-sid="{$sid}"><li draggable="true"><img class="favico" src="{$favicon}"/>{$title}<i class="btn-del" title="删除"></i><i class="btn-edit" title="重命名"></i></li></a>';    
+    define(["str_util"] , function (stu){
+        var tpl = '<a class="{$class}" href="{$link}" data-id="{$id}" data-sid="{$sid}"><li draggable="true"><img class="favico" src="{$favicon}"/><span>{$title}</span><i class="btn-del" title="删除"></i><i class="btn-edit" title="重命名"></i></li></a>';    
         var getAbsolute = function (dom){
             var rect = dom.getBoundingClientRect() , newRect = {};
 
@@ -14,8 +14,11 @@
 
             return newRect;     
         };
-        var UrlUiEntity = function (container){
+        var UrlUiEntity = function (container , editor , handler){
             this.container = container;
+            this.editor = editor;
+            this.handler = handler;
+
             this.tips = $("#js-tips");
         };
 
@@ -77,7 +80,7 @@
                 this.container.append($(htmls.join("")));  
             },
 
-            canAdd : function (ue){
+            editorValid : function (ue , dataId){
                 var dtd = $.Deferred();
 
                 if ($.trim(ue.name) == ""){
@@ -89,12 +92,30 @@
                 } 
 
                 repeatNode = this.container.find("a[data-sid=" + ue.sid + "]"); 
+
+                if (dataId !== undefined){
+                    if (dataId == repeatNode.attr("data-id")){
+                        return dtd.resolve();
+                    }
+                    else{
+                        return dtd.reject({errno : 103 , errmsg : "重复网址"});
+                    }
+                }    
+
                 if (repeatNode.length) {
                     return dtd.reject({errno : 103 , errmsg : "重复网址"});
                 }
 
-                return dtd.resolve();
+                return dtd.resolve();    
             }, 
+
+            updateNode : function (ue , id){
+                var node = this.container.find("a[data-id=" + id + "]"); 
+
+                node.attr("data-id" , id).attr("data-sid" , ue.sid).attr("href" , ue.url);
+
+                node.find("li span").html(ue.name);
+            },
 
             showRepeat : function (node){
                 var sid = node.sid ,
@@ -110,6 +131,17 @@
                 this.container.append(node);
                 return this._fadeTip(node , "ok");
             } ,
+
+            fillEditByNode : function (node){
+                var id = node.attr("data-id"), 
+                    url = node.attr("href") , 
+                    name = node.html().stripTags(),
+                    handler = this.handler;  
+
+                handler.nameIpt.val(name); 
+                handler.urlIpt.val(url);
+                handler.lastDataId.val(id);
+            },
 
             remove : function (node){
                 node.remove();   

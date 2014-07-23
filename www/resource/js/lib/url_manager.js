@@ -13,7 +13,7 @@
 
         UrlManager.prototype = {
             init : function (){
-                this.urlUiEntity = new uue(this.siteContainer);
+                this.urlUiEntity = new uue(this.siteContainer , this.editor , this.handler);
             },    
 
             finishEdit : function (){
@@ -28,7 +28,7 @@
                 var urlEntity = new ue(this.handler.nameIpt.val() , this.handler.urlIpt.val()) ,   
                     urlUiEntity = this.urlUiEntity ,
                     self = this ,
-                    promise = urlUiEntity.canAdd(urlEntity)   
+                    promise = urlUiEntity.editorValid(urlEntity)   
                     .then(function (){
                         return up.add(urlEntity.name , urlEntity.url);
                     })
@@ -82,7 +82,45 @@
                 } , function (){});    
 
             },
+
+            prepareEdit : function (node){
+                var urlUiEntity = this.urlUiEntity;
+
+                urlUiEntity.fillEditByNode(node); 
+
+                this.editor.editStatus = "edit";   
+            },    
+
             edit : function (){
+                var urlUiEntity = this.urlUiEntity, 
+                    urlEntity = new ue(this.handler.nameIpt.val() , this.handler.urlIpt.val()) ,
+                    self = this ,
+                    promise = urlUiEntity.editorValid(urlEntity , this.handler.lastDataId.val())                    
+
+                    .then(function (){
+                        return up.edit(urlEntity.name , urlEntity.url , self.handler.lastDataId.val());
+                    })
+                    .done(function (data){
+                        urlUiEntity.updateNode(urlEntity, self.handler.lastDataId.val());
+
+                        self.handler.nameIpt.val("");
+                        self.handler.urlIpt.val("");  
+                        self.editor.editStatus = "add"; 
+                    })
+                    .fail(function (data){
+                        switch(data.errno){
+                            case 101:
+                                self.handler.nameIpt.siblings(".error").html("请您填写网站名称");   
+                                break; 
+                            case 102:
+                                self.handler.urlIpt.siblings(".error").html("请您填写网址");   
+                                break; 
+                            case 103:
+                                self.handler.urlIpt.siblings(".error").html("这个网址有重复"); 
+                                urlUiEntity.showRepeat(urlEntity);  
+                                break;
+                        }
+                    });
 
             },
 

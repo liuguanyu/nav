@@ -173,8 +173,6 @@ module.exports = Controller("Home/BaseController" , function(){
                                     });
                                 });
 
-                                console.info(wbs0,176);
-
                                 /* 本组默认的放在最后 */
                                 wbs0 = wbs0.concat(wbs1);  
 
@@ -200,7 +198,6 @@ module.exports = Controller("Home/BaseController" , function(){
                                     }
                                 }); 
                                 */
-console.info(wbs0);
                                 return wbs0;   
                             } , function (){
                                 return [];
@@ -371,7 +368,60 @@ console.info(wbs0);
                         return D("user_websites_order").where({user_id : uid}).update({
                             "websites_id_order" : orderStr    
                         });
+                    } , 
+
+                    edit : function (data){
+                        var id = data.id ,
+                            name = data.name ,
+                            url = data.url;
+
+                        return D("ugroup_websites").where({"websites_id" : id}).select().then(function (uwdata){
+                            /* 公共网址不能改 */
+                            if (uwdata.length != 0){
+                                return getPromise("1004" , true);
+                            }  
+                            else{
+                                return getPromise([]);
+                            }  
+                        } , function (){
+                            return getPromise([]);
+                        })
+
+                        .then(function (){
+                            /* 别的同学也使用的网址不能改 */
+                            return D("user_websites").where("websites_id = " + id + " and uid <> " + uid).select().then(function (oudata){
+                                if (oudata.length != 0){
+                                    return getPromise("1005" , true);                                    
+                                } 
+                                else{
+                                    return getPromise([]);
+                                }    
+                            } , function (){
+                                return getPromise([]);
+                            });   
+                        })
+
+                        .then(function (){
+                            //看看确实是自己的网址么？
+                            return D("user_websites").where({
+                                "user_id" : uid ,
+                                "websites_id" : id 
+                            }).select().then(function (myData){
+                                if (myData.length){
+                                    return D("websites").where({id : id}).update({
+                                        title : name,
+                                        url : url
+                                    });    
+                                }   
+                                else{
+                                    return getPromise("1006" , true);  
+                                } 
+                            } , function (data){
+                                console.info(data);    
+                            });   
+                        });     
                     }
+
                 };
 
             var act = this.get("act"),
@@ -390,7 +440,7 @@ console.info(wbs0);
             acts[act].call(this , data).then(function(data){
                 self.success(data);
             } , function (data){
-                self.error(1001 , "操作失败" , data);  
+                self.error(data , "操作失败" , data);  
             });          
         }  
     };

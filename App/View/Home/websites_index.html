@@ -51,13 +51,7 @@
             </div>  
 
             <div class="main">     
-                <div class="pct-1o5">
-                    <ul class="menu">
-                        <li class="active"><a target="_self" href="">常用网址</a></li>
-                        <li><a target="_self" href="">云Hosts</a></li>
-                        <li><a target="_self" href="">定时提醒</a></li>
-                    </ul>
-                </div>
+                <%include menu.html %>
 
                 <div class="pct-4o5">
                     <div class="websites-container">
@@ -84,9 +78,10 @@
                                     </dd>
                                 </dl> 
                                 <div class="form-cell btn-line">
-                                    <button class="btn btn-finish" type="button">添加</button>
+                                    <button class="btn btn-finish" type="button">完成</button>
                                     <button class="btn btn-cancle" type="button">取消</button>
-                                </div>
+                                    <input id="last-data-id" type="hidden">
+                                </div> 
                             </form>                       
                         </div>
                     </div>               

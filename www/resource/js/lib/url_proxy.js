@@ -38,6 +38,16 @@
                 var act = "drag" , data = {new_order : newOrder} ;
 
                 return this._send2Svc(act , data);                
+            } , 
+            edit : function (name , url , id){
+                var act = "edit" ,                     
+                    data = {
+                        name : name ,
+                        url  : url ,
+                        id   : id
+                    }
+
+                return this._send2Svc(act , data);     
             }
         };
 
