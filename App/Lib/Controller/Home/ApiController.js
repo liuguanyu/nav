@@ -189,18 +189,6 @@ module.exports = Controller("Home/BaseController" , function(){
                                 return D("UserWebsitesOrder").insert(uid , getFieldFromArray(retMe , "id")).then(function (){
                                     return retMe;
                                 });
-
-                               
-                                /*
-                                return D("User_websites_order").thenAdd({
-                                    "user_id" : uid,
-                                    "websites_id_order" : getFieldFromArray(retMe , "id").join(",")
-                                } , {
-                                    "user_id" : uid
-                                }).then(function (data){ 
-                                    return retMe;
-                                });
-                                */
                             }); 
  
                         });
