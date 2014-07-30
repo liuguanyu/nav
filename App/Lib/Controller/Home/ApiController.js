@@ -98,48 +98,20 @@ module.exports = Controller("Home/BaseController" , function(){
                     } ,
 
                     get : function (){
-                        return D("user_websites_order").where({"user_id" : uid}).select().then(function (data){
-                            if (data.length == 0){ //没有结果,去失败分支
-                                return getPromise(0 , true);    
-                            }   
-                            else{
-                                return data;    
-                            }
-                        })
-                        .then(function (data){
-                            var wbs = data[0].websites_id_order;
-
+                        return D("UserWebsitesOrder").getWebsitesOrderByUid(uid)
+                        .then(function (webids){
                             //找出当前用户的网址 
-                            var promise1 = D("websites").where("id in (" + wbs + ")").order("find_in_set (id , '" + wbs + "')").select().then(function (data){
-                                return data;
-                            } , function (){
-                                return [];    
-                            });   
+                            var promise1 = D("Websites").getWebsitesByIds(webids);   
 
                             //找出是本组默认网址的。    
-                            var promise2 = D("ugroup_websites").where("ugid in (" + ugids.join(",") + ")").select().then(function (data){
-                                //return data;
-                                var ids = [];
-
-                                data.forEach(function (el){
-                                    ids.push(el.websites_id);
-                                });
-
-                                return D("websites").where("id in (" + ids.join(",") + ")").select().then(function (data){
-                                    return data;
-                                } , function (){
-                                    return [];
-                                })
+                            var promise2 = D("UgroupWebsites").getWebsitesOrderByUgids(ugids).then(function (data){
+                                return D("Websites").getWebsitesByIds(getFieldFromArray(data , "websites_id"));     
                             } , function (){
-                                return [];    
+                                return [];
                             });
 
                             //别组的默认网址
-                            var promise3 = D("ugroup_websites").where("ugid not in (" + ugids.join(",") + ") and websites_id in (" + wbs + ")").select().then(function (data){
-                                return data;
-                            } , function (){
-                                return [];    
-                            })
+                            var promise3 = D("UgroupWebsites").getOtherGroupWebsites(ugids , webids);
 
                             return Promise.all([promise1 , promise2 , promise3]).then(function(res){
                                 var wbs0 = res[0] , //本人私藏
@@ -147,167 +119,88 @@ module.exports = Controller("Home/BaseController" , function(){
                                     wbs2 = res[2] , //其他组公用
                                     node , decide;
 
-                                /* 先合并别的组的网址 */    
-                                wbs0.forEach(function (el , i){
-                                    node = wbs0[i];
-
-                                    decide = wbs2.some(function(el2){
-                                        return node.id == el2.websites_id;    
-                                    });
-
-                                    if (decide){
-                                        wbs0[i].is_protected = 2; //别组网址，可删，不可改
-                                    }                                    
-                                }); 
-
-                                wbs0.forEach(function (el , i){
-                                    node = wbs0[i];
-                                    //wbs1[i].is_protected = 1 ; //本组网址，不可删，不可改
-
-                                    wbs1.forEach(function(el2 , j){
-                                        wbs1[j].is_protected = 1; //本组网址，不可删，不可改
-
-                                        if (node.id == el2.id){
-                                            wbs1.splice(j , 1);
-                                            wbs0[i].is_protected = 1; //本组网址，不可删，不可改
-                                        }    
-                                    });
+                                // 标记其他组
+                                markEqualArray(wbs0 , wbs2 , function (el1 , el2){
+                                    return el1.id == el2.websites_id;
+                                } , function (arr , idx){
+                                    arr[idx].is_protected = 2 ; //别组网址，可删，不可改
                                 });
 
-                                /* 本组默认的放在最后 */
-                                wbs0 = wbs0.concat(wbs1);  
+                                wbs1.forEach(function (el , i){
+                                    wbs1[i].is_protected = 1; //本组网址，不可删，不可改   
+                                });
 
-                                /*    
-                                wbs0.forEach(function (el , i){
-                                    node = wbs0[i];
-
-                                    decide = wbs1.some(function(el2){
-                                        return node.id == el2.websites_id;    
-                                    });
-
-                                    if (decide){
-                                        wbs0[i].is_protected = 1; //本组网址，不可删，不可改
-                                    }
-                                    else{
-                                        decide = wbs2.some(function(el2){
-                                            return node.id == el2.websites_id;    
-                                        });
-
-                                        if (decide){
-                                            wbs0[i].is_protected = 2; //别组网址，可删，不可改
-                                        }
-                                    }
-                                }); 
-                                */
+                                //合并本人、本组
+                                wbs0 = combineArray(wbs0 , wbs1 , function (el1 , el2){
+                                    return el1.id == el2.id;   
+                                } , function (arr , idx){                                  
+                                    arr[idx].is_protected = 1 ;   //本组网址，不可删，不可改 
+                                });
+                            
                                 return wbs0;   
                             } , function (){
                                 return [];
                             }); 
                         } , function (data){
                             // 组内的默认网址
-                            var promise1 = D("ugroup_websites").where("ugid in (" + ugids.join(",") + ")").select()
-                                .then(function (data){                                    
-                                    var wbs = [];
+                            var promise1 = D("UgroupWebsites").getWebsitesOrderByUgids(ugids).then(function (data){
+                                return D("Websites").getWebsitesByIds(getFieldFromArray(data , "websites_id"));     
+                            } , function (){
+                                return [];
+                            });
 
-                                    data.forEach(function(el){
-                                        wbs.push(el.websites_id);
-                                    });
-
-                                    return wbs; 
-                                })
-                                .then(function (data){
-                                    if (data.length){
-                                        return D("websites").where("id in (" + data.join(",") + ")").select().then(function(data){
-                                            return data;
-                                        });
-                                    }
-                                    else{
-                                        return [];
-                                    }
-                                } , function (data){
-                                    return [];
-                                });
-                            
                             // 当前用户的默认网址
-                            var promise2 = D("user_websites").where({"uid" : uid}).select()
+                            var promise2 = D("UserWebsites").getWebsitesByUid(uid).then(function (webids){
+                                var webids = getFieldFromArray(webids , "websites_id"),
+                                    promiseMe = D("Websites").getWebsitesByIds(webids) ,
+                                    promiseOtherGroup = D("UgroupWebsites").getOtherGroupWebsites(ugids , webids);  
 
-                            .then(function (data){
-                                var wbs = [];
-
-                                data.forEach(function(el){
-                                    wbs.push(el.websites_id);
-                                });
-                                return wbs;
-                            })
-
-                            .then(function (data){
-                                //我的私有网址
-                                var promiseMe = D("Websites").where("id in (" + data.join(",") + ")").select().then(function(data){
-                                    return data;
-                                } , function (){
-                                    return [];
-                                });
-
-                                // 这个网址是否是别的组的公共网址
-                                var promiseOtherGroup = D("ugroup_websites")
-                                    .where("websites_id in (" + data.join(",") + ") and ugid not in (" + ugids.join(",") + ")")
-                                    .select()
-                                    .then(function(data){
-                                       return data;
-                                    } , function (){
-                                       return []; 
-                                });      
-                                
                                 return Promise.all([promiseMe , promiseOtherGroup]).then(function (res){
                                     var pm = res[0] ,
-                                        po = res[1] ;    
+                                        po = res[1] ;   
+                                        
+                                    markEqualArray(pm , po , function (el1 , el2){
+                                        return el1.id == el2.websites_id;
+                                    } , function (arr , idx){
+                                        arr[idx].is_protected = 2 ; //别组网址，可删，不可改
+                                    });   
 
-                                    pm.forEach(function (el , i){
-                                        var node = pm[i] , decide;
-
-                                        decide = po.some(function (el2){
-                                            return el2.websites_id == node.id;
-                                        });
-
-                                        if (decide){
-                                            pm[i].is_protected = 2;  //是别组网址 ，许删不许改     
-                                        }
-                                    });
                                     return pm;       
-                                });                                 
-                            } , function (data){
-                                return[];
-                            }); 
+                                });     
+                            });  
 
                             //消重
                             return Promise.all([promise1 , promise2]).then(function(res){    
                                 var ret = res[0] ,
-                                    retMe = res[1] , newRet , idOrder = [] ;
+                                    retMe = res[1];
 
+                                //合并本人、本组
                                 ret.forEach(function (el , i){
-                                    ret[i].is_protected = 1; //是本组网址，不许删，不许改
-
-                                    retMe.forEach(function (el2 , j){
-                                        if (el.id == el2.id){
-                                            retMe.splice(j , 1);
-                                        }
-                                    });
+                                    ret[i].is_protected = 1; //本组网址，不可删，不可改   
                                 });
 
-                                newRet = ret.concat(retMe);
-                                newRet.forEach(function (el){
-                                    idOrder.push(el.id);
-                                });      
-
+                                retMe = combineArray(retMe , ret , function (el1 , el2){
+                                    return el1.id == el2.id;   
+                                } , function (arr , idx){                                  
+                                    arr[idx].is_protected = 1 ;   //本组网址，不可删，不可改 
+                                });
+                                
                                 //插入User_websites
+                                return D("UserWebsitesOrder").insert(uid , getFieldFromArray(retMe , "id")).then(function (){
+                                    return retMe;
+                                });
+
+                               
+                                /*
                                 return D("User_websites_order").thenAdd({
                                     "user_id" : uid,
-                                    "websites_id_order" : idOrder.join(",")
+                                    "websites_id_order" : getFieldFromArray(retMe , "id").join(",")
                                 } , {
                                     "user_id" : uid
                                 }).then(function (data){ 
-                                    return newRet;
+                                    return retMe;
                                 });
+                                */
                             }); 
  
                         });
@@ -488,6 +381,7 @@ module.exports = Controller("Home/BaseController" , function(){
             acts[act].call(this , data).then(function(data){
                 self.success(data);
             } , function (data){
+                console.info(data);
                 self.error(data , "操作失败" , data);  
             });          
         }  
