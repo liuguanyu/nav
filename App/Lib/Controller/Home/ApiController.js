@@ -97,23 +97,23 @@ module.exports = Controller("Home/BaseController" , function(){
                         });   
                     } ,
 
-                    get : function (){
+                    get : function (){   
+                        var promiseGroup = D("UgroupWebsites").getWebsitesOrderByUgids(ugids).then(function (data){
+                                return D("Websites").getWebsitesByIds(getFieldFromArray(data , "websites_id"));     
+                            } , function (){
+                                return [];
+                            }); 
+
+
                         return D("UserWebsitesOrder").getWebsitesOrderByUid(uid)
                         .then(function (webids){
                             //找出当前用户的网址 
                             var promise1 = D("Websites").getWebsitesByIds(webids);   
 
-                            //找出是本组默认网址的。    
-                            var promise2 = D("UgroupWebsites").getWebsitesOrderByUgids(ugids).then(function (data){
-                                return D("Websites").getWebsitesByIds(getFieldFromArray(data , "websites_id"));     
-                            } , function (){
-                                return [];
-                            });
-
                             //别组的默认网址
-                            var promise3 = D("UgroupWebsites").getOtherGroupWebsites(ugids , webids);
+                            var promise2 = D("UgroupWebsites").getOtherGroupWebsites(ugids , webids);
 
-                            return Promise.all([promise1 , promise2 , promise3]).then(function(res){
+                            return Promise.all([promise1 , promiseGroup , promise2]).then(function(res){
                                 var wbs0 = res[0] , //本人私藏
                                     wbs1 = res[1] , //本组公用
                                     wbs2 = res[2] , //其他组公用
@@ -142,15 +142,8 @@ module.exports = Controller("Home/BaseController" , function(){
                                 return [];
                             }); 
                         } , function (data){
-                            // 组内的默认网址
-                            var promise1 = D("UgroupWebsites").getWebsitesOrderByUgids(ugids).then(function (data){
-                                return D("Websites").getWebsitesByIds(getFieldFromArray(data , "websites_id"));     
-                            } , function (){
-                                return [];
-                            });
-
                             // 当前用户的默认网址
-                            var promise2 = D("UserWebsites").getWebsitesByUid(uid).then(function (webids){
+                            var promiseCurr = D("UserWebsites").getWebsitesByUid(uid).then(function (webids){
                                 var webids = getFieldFromArray(webids , "websites_id"),
                                     promiseMe = D("Websites").getWebsitesByIds(webids) ,
                                     promiseOtherGroup = D("UgroupWebsites").getOtherGroupWebsites(ugids , webids);  
@@ -170,7 +163,7 @@ module.exports = Controller("Home/BaseController" , function(){
                             });  
 
                             //消重
-                            return Promise.all([promise1 , promise2]).then(function(res){    
+                            return Promise.all([promiseGroup , promiseCurr]).then(function(res){    
                                 var ret = res[0] ,
                                     retMe = res[1];
 
