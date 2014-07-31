@@ -2,14 +2,18 @@
 
 module.exports = Model(function() {
     return {
-        getWebsitesOrderByUgids : function (ugids){
-            var dfd = getDefer();
+        getWebsitesOrderByUgids : function (ugids , websitesIds){
+            var dfd = getDefer() , conds = {};
 
             if (ugids.length == 0){
                 dfd.reject([]);  
             }
             else{
-                this.where({"ugid" : ["in" , ugids]}).select().then(function (data){
+                conds["ugid"] = ["in" , ugids] ;
+                if (websitesIds){
+                    conds["websites_id"] = ["in" , websitesIds];
+                }
+                this.where(conds).select().then(function (data){
                     dfd.resolve(data);
                 } , function (){
                     dfd.reject([]);
@@ -19,16 +23,16 @@ module.exports = Model(function() {
             return dfd.promise;
         } ,
 
-        getOtherGroupWebsites : function (ugids , websites){
+        getOtherGroupWebsites : function (ugids , websiteIds){
             var dfd = getDefer();  
             
-            if (ugids.length == 0 || websites.length == 0){
+            if (ugids.length == 0 || websiteIds.length == 0){
                 dfd.reject([]);  
             }
             else{
                 this.where({
                     "ugid" : ["not in" , ugids] ,
-                    "websites_id" : ["in" , websites]
+                    "websites_id" : ["in" , websiteIds]
                 }).select().then(function (data){
                     dfd.resolve(data);
                 } , function (){

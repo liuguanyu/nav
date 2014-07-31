@@ -8,7 +8,7 @@
 
                 return $.ajax({
                     url : reqUrl,
-                    data : "data=" + JSON.stringify(data),
+                    data : "data=" + encodeURIComponent(JSON.stringify(data)),
                     type : "POST"
                 });    
             },

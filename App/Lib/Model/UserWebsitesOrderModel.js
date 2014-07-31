@@ -28,6 +28,30 @@ module.exports = Model(function() {
             } , {
                 "user_id" : uid
             })
+        } ,
+
+        updateWebsitesOrder : function (uid , wid){
+            var dfd = getDefer() , self = this;
+
+            this.getWebsitesOrderByUid(uid).then(function (websitesIdOrders){
+                if (-1 == websitesIdOrders.indexOf(wid)) {
+                    websitesIdOrders.push(wid) ;
+                }  
+
+                websitesIdOrders = arrayUnique(websitesIdOrders);
+
+                self.where({"user_id" : uid})
+                    .update({"websites_id_order" : websitesIdOrders.join(",")})
+                    .then(function (data){
+                        dfd.resolve(websitesIdOrders);
+                    } , function (){
+                        dfd.reject({});
+                    });
+            } , function (data){
+                dfd.reject([]);
+            });
+
+            return dfd.promise;
         }
     };
 });

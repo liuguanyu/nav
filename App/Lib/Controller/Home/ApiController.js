@@ -38,59 +38,25 @@ module.exports = Controller("Home/BaseController" , function(){
                             return this.error("1001" , "invalid act!" , {});
                         } 
 
-                        var name = data.name ,
-                            url  = data.url ,
-                            myMd5  = md5(url);
-
-                        return D("Websites").thenAdd({
-                            "url" : url ,
-                            "title" : name ,
-                            "url_md5" : myMd5
-                        } , {
-                            "url_md5" : myMd5
-                        })
-
+                        return D("Websites").addWebsite(data.name , data.url)   
                         .then(function (websiteId){
-                            return {
-                                websiteId : websiteId ,
-                                uid : uid       
-                            };    
-                        })
+                            //插入用户、网址表
+                            var promise1 = D("UserWebsites").addUserWebsites(uid , websiteId);
 
-                        .then(function (data){
-                            var websiteId = data.websiteId;
+                            //更新顺序表            
+                            var promise2 = D("UserWebsitesOrder").updateWebsitesOrder(uid , websiteId);
 
-                            var promise1 = D("user_websites").thenAdd({
-                                "uid" : data.uid ,
-                                "websites_id" : websiteId 
-                            } , {
-                                "websites_id" : websiteId ,                                
-                                "uid" : data.uid 
-                            }).then(function (){
-                                return websiteId;    
-                            } , function (){
-                                return {};
-                            });
+                            //是否别组公共
+                            var promise3 = D("UgroupWebsites").getOtherGroupWebsites(ugids , [websiteId]);
 
-                            var promise2 = D("user_websites_order").where({"user_id" : uid}).select().then(function (udata){
-                                var id = udata[0].id , 
-                                    newId = data.websiteId ,
-                                    orders = (udata[0].websites_id_order == "") 
-                                             ? [] 
-                                             : udata[0].websites_id_order.split(",");
-
-                                if (-1 == orders.indexOf(newId)) {
-                                     orders.push(newId) ;
-                                }           
-                                
-                                return D("user_websites_order").where({id : id}).update({"websites_id_order" : orders.join(",")});
-                            });    
-
-                            return Promise.all([promise1 , promise2]).then(function (res){
+                            return Promise.all([promise1 , promise2 , promise3]).then(function (res){
+                                var isProtected = (res[2].length == 0) 
+                                        ? 0 
+                                        : 2 ;
                                 return {
-                                    id : res[0],
-                                    is_protected : 0 // 暂未实现
-                                };    
+                                    id : websiteId , 
+                                    is_protected : isProtected
+                                }        
                             } , function (data){
                                 return getPromise(-1 , true);
                             })    
@@ -348,6 +314,8 @@ module.exports = Controller("Home/BaseController" , function(){
 
             var act = this.get("act"),
                 data = this.post("data");
+
+            data = decodeURIComponent(data);
 
             if (typeof data == "string"){
                 data = JSON.parse(data);
